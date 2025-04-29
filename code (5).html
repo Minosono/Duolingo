@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanz-Lernpfad</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Optional: Font Awesome für Icons (wie bei Duolingo oft verwendet) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <h1>Mein Tanz-Lernpfad</h1>
+
+    <div class="learning-path">
+        <!-- Beispiel-Lektionen -->
+        <div class="lesson-node" data-lesson-id="lesson1">
+            <div class="lesson-icon">
+                <i class="fas fa-shoe-prints"></i> <!-- Beispiel Icon -->
+            </div>
+            <span>Lektion 1: Grundschritt</span>
+        </div>
+        <div class="connector"></div>
+        <div class="lesson-node" data-lesson-id="lesson2">
+            <div class="lesson-icon">
+                <i class="fas fa-sync-alt"></i> <!-- Beispiel Icon -->
+            </div>
+            <span>Lektion 2: Drehung</span>
+        </div>
+        <div class="connector"></div>
+         <div class="lesson-node" data-lesson-id="lesson3">
+            <div class="lesson-icon">
+                 <i class="fas fa-star"></i> <!-- Beispiel Icon -->
+            </div>
+            <span>Lektion 3: Pose</span>
+        </div>
+        <!-- Füge hier weitere Lektionen und Konnektoren hinzu -->
+    </div>
+
+    <!-- Das Overlay/Modal für die Lektion (zuerst versteckt) -->
+    <div id="lesson-overlay" class="overlay hidden">
+        <div class="overlay-content">
+            <button class="close-button">&times;</button>
+            <h2 id="lesson-title">Lektion: Ordne die Schritte!</h2>
+            <p>Ziehe die Bilder in die richtige Reihenfolge.</p>
+
+            <div class="drag-area">
+                <div id="image-source">
+                    <p>Verfügbare Schritte:</p>
+                    <!-- Bilder werden hier per JS eingefügt -->
+                </div>
+                <div id="drop-target">
+                    <p>Deine Reihenfolge:</p>
+                    <!-- Drop-Zonen (Platzhalter) -->
+                     <div class="drop-placeholder" data-order="1">1</div>
+                     <div class="drop-placeholder" data-order="2">2</div>
+                     <div class="drop-placeholder" data-order="3">3</div>
+                     <!-- Füge bei Bedarf mehr hinzu -->
+                </div>
+            </div>
+
+            <button id="check-button">Überprüfen</button>
+            <div id="feedback"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

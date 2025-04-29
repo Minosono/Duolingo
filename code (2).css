@@ -1,0 +1,210 @@
+/* Globale Stile & Duolingo-ähnliches Farbschema (Beispiel) */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #2d2d3d; /* Dunkler Hintergrund */
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding-top: 20px;
+}
+
+h1 {
+    color: #58a7d5; /* Duolingo-ähnliches Blau/Lila */
+}
+
+/* Lernpfad Stile */
+.learning-path {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.lesson-node {
+    background-color: #7b4a9c; /* Duolingo-Lila */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column; /* Icon über Text */
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center; /* Text zentrieren */
+    border: 3px solid #a36cd1; /* Hellerer Rand */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.lesson-node:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.lesson-icon {
+    font-size: 28px; /* Größe des Icons */
+    margin-bottom: 5px;
+}
+
+.lesson-node span {
+    font-size: 12px;
+    color: #f0e8f7; /* Heller Text */
+    max-width: 70px; /* Verhindert Überlaufen */
+    line-height: 1.2;
+}
+
+
+.connector {
+    width: 4px;
+    height: 30px; /* Abstand zwischen Nodes */
+    background-color: #553370; /* Dunkleres Verbindungselement */
+    margin: 0; /* Kein extra Margin */
+}
+
+/* Overlay Stile */
+.overlay {
+    position: fixed; /* Bleibt beim Scrollen sichtbar */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Halbtransparenter Hintergrund */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Über allem anderen */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.hidden {
+    opacity: 0;
+    pointer-events: none; /* Klick durchlassen, wenn versteckt */
+}
+
+.overlay-content {
+    background-color: #3a3a4a; /* Etwas helleres Grau/Lila für den Inhalt */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    width: 80%;
+    max-width: 600px; /* Maximale Breite */
+    text-align: center;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #fff;
+}
+
+/* Drag & Drop Bereich */
+.drag-area {
+    display: flex;
+    justify-content: space-around; /* Bereiche nebeneinander */
+    margin-top: 20px;
+    min-height: 150px; /* Mindesthöhe geben */
+    gap: 20px; /* Abstand zwischen den Bereichen */
+}
+
+#image-source, #drop-target {
+    border: 2px dashed #58a7d5;
+    padding: 15px;
+    border-radius: 8px;
+    width: 45%; /* Aufteilung des Platzes */
+}
+
+#image-source p, #drop-target p {
+    margin-top: 0;
+    font-weight: bold;
+    color: #bbb;
+}
+
+.dance-step-img {
+    width: 80px; /* Größe der Bilder anpassen */
+    height: 80px;
+    object-fit: cover; /* Bild anpassen */
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: grab; /* Zeigt an, dass es greifbar ist */
+    background-color: #eee; /* Platzhalterfarbe, falls Bild nicht lädt */
+    display: inline-block; /* Damit sie nebeneinander passen */
+    vertical-align: top; /* Oben ausrichten */
+}
+
+.dance-step-img:active {
+    cursor: grabbing; /* Cursor beim Ziehen */
+    opacity: 0.7; /* Leichter durchsichtig beim Ziehen */
+}
+
+.drop-placeholder {
+    width: 90px; /* Etwas größer als Bilder */
+    height: 90px;
+    border: 2px dashed #aaa;
+    border-radius: 5px;
+    display: inline-flex; /* Nebeneinander und Inhalt zentrieren */
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    background-color: #4a4a5a; /* Dunklerer Hintergrund für Platzhalter */
+    color: #888;
+    font-size: 24px;
+    vertical-align: top; /* Oben ausrichten */
+    transition: background-color 0.2s ease;
+}
+
+.drop-placeholder.drag-over {
+    background-color: #58a7d5; /* Hervorheben beim Darüberziehen */
+    border-color: #fff;
+}
+
+/* Verhindert, dass Bilder innerhalb des Platzhalters den Text überdecken */
+.drop-placeholder .dance-step-img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#check-button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    background-color: #58cc02; /* Duolingo Grün */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#check-button:hover {
+    background-color: #4aa701;
+}
+
+#feedback {
+    margin-top: 15px;
+    font-weight: bold;
+    min-height: 20px; /* Platz für Feedback reservieren */
+}
+
+.feedback-correct {
+    color: #58cc02; /* Grün für korrekt */
+}
+
+.feedback-incorrect {
+    color: #ff4b4b; /* Rot für falsch */
+}
