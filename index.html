@@ -1,36 +1,56 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tanz-Lernpfad</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome für Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Link zur CSS-Datei -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Warnung für falsche Orientierung -->
     <div id="orientation-warning" class="hidden">
-        <!-- ... (Warnung bleibt gleich) ... -->
+        <div class="warning-content">
+            <i class="fas fa-mobile-screen-button"></i>
+            <p>Bitte drehe dein Gerät ins Hochformat, um die App zu nutzen.</p>
+        </div>
     </div>
 
+    <!-- Hauptcontainer für die App-Struktur -->
     <div id="app-container">
+
+        <!-- Header (Duolingo-Stil, nicht funktional) -->
         <header class="app-header">
-            <!-- ... (Header bleibt gleich) ... -->
+            <div class="header-left">
+                <i class="fas fa-flag"></i> <!-- Sprachflagge (Platzhalter) -->
+            </div>
+            <div class="header-center">
+                 <i class="fas fa-star yellow-icon"></i> 1196 <!-- Beispiel -->
+            </div>
+            <div class="header-right">
+                <i class="fas fa-gem blue-icon"></i> 14728 <!-- Beispiel Gems -->
+                <i class="fas fa-heart red-icon"></i> <i class="fas fa-infinity"></i> <!-- Beispiel Herzen -->
+            </div>
         </header>
 
+        <!-- Hauptinhalt (Scrollbar, wenn nötig) -->
         <main class="main-content">
-             <!-- Platzhalter für die Duolingo Figur -->
+            <!-- Platzhalter für die Duolingo Figur -->
             <div id="duo-character">
-                 <!-- Bild wird via CSS als background oder per JS eingefügt -->
-                <img src="images/duo_char_placeholder.png" alt="Figur" id="character-image"> <!-- Pfad anpassen! -->
+                 <!-- Passe den Pfad zu deinem Charakterbild an -->
+                <img src="images/duo_char_placeholder.png" alt="Figur" id="character-image">
             </div>
 
             <h1>Tanz-Lernpfad</h1>
             <p class="section-title">SECTION 1, UNIT 1: Grundlegende Schritte</p>
 
             <div class="learning-path">
-                <!-- Lektionen bleiben strukturell gleich, JS fügt Klassen hinzu -->
-                <!-- Beispiel Nodes -->
+                <!-- Lektionen werden per JS positioniert und gestylt -->
+                <!-- Die data-lesson-id muss mit lessonData in JS übereinstimmen! -->
                 <div class="lesson-node type-dragdrop" data-lesson-id="lesson1">
                     <div class="lesson-icon"><i class="fas fa-shoe-prints"></i></div>
                     <span>Grundschritt</span>
@@ -40,14 +60,13 @@
                     <div class="lesson-icon"><i class="fas fa-question"></i></div>
                     <span>Theorie-Check</span>
                 </div>
-                 <!-- ... (Rest der Lektionen wie vorher) ... -->
                 <div class="connector"></div>
                 <div class="lesson-node type-dragdrop" data-lesson-id="lesson2">
                     <div class="lesson-icon"><i class="fas fa-sync-alt"></i></div>
                     <span>Drehung</span>
                 </div>
                 <div class="connector"></div>
-                 <div class="lesson-node type-trophy" data-lesson-id="unit1Trophy">
+                 <div class="lesson-node type-trophy" data-lesson-id="unit1Trophy"> <!-- Nur ein Meilenstein -->
                      <div class="lesson-icon trophy"><i class="fas fa-trophy"></i><span>1</span></div>
                  </div>
                 <div class="connector"></div>
@@ -60,58 +79,72 @@
                     <div class="lesson-icon"><i class="fas fa-clipboard-question"></i></div>
                     <span>Rhythmus-Quiz</span>
                 </div>
+                 <!-- Füge hier weitere Lektionen/Konnektoren nach Bedarf hinzu -->
             </div>
         </main>
 
+        <!-- Footer Nav Bar (Duolingo-Stil, nicht funktional) -->
         <footer class="app-footer">
-            <!-- ... (Footer bleibt gleich) ... -->
+            <div class="footer-icon active"><i class="fas fa-home"></i></div>
+            <div class="footer-icon"><i class="fas fa-dumbbell"></i></div>
+            <div class="footer-icon"><i class="fas fa-user"></i></div>
+            <div class="footer-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="footer-icon"><i class="fas fa-store"></i></div>
         </footer>
 
-    </div>
+    </div> <!-- Ende App-Container -->
 
+
+    <!-- Das Overlay/Modal für die Lektion -->
     <div id="lesson-overlay" class="overlay hidden">
-        <!-- ... (Overlay Inhalt bleibt strukturell gleich) ... -->
-         <div class="overlay-content">
+        <div class="overlay-content">
+            <!-- Overlay Header mit Fortschrittsbalken -->
             <div class="overlay-header">
-                 <button class="close-button">×</button>
+                 <button class="close-button" aria-label="Schließen">×</button>
                  <div class="progress-bar-container">
                      <div class="progress-bar-inner"></div>
                  </div>
-                 <i class="fas fa-heart red-icon"></i> <span class="heart-count"></span>
+                 <i class="fas fa-heart red-icon"></i> <span class="heart-count"></span> <!-- Herzanzahl oder unendlich -->
             </div>
 
-            <h2 id="lesson-task-description">Lade Lektion...</h2>
+            <h2 id="lesson-task-description">Lade Lektion...</h2> <!-- Aufgabenstellung -->
 
+            <!-- Bereich für Drag & Drop Aufgaben -->
             <div id="drag-area" class="lesson-area hidden">
-                 <p class="instruction-text">Ziehe oder klicke die Schritte in die richtige Reihenfolge.</p> <!-- Text angepasst -->
+                 <p class="instruction-text">Ziehe oder klicke die Schritte in die richtige Reihenfolge.</p>
                 <div id="image-source">
                     <p>Verfügbare Schritte:</p>
+                    <!-- Bilder werden hier per JS eingefügt -->
                 </div>
                 <div id="drop-target">
                     <p>Deine Reihenfolge:</p>
+                    <!-- Drop-Zonen (Platzhalter) werden hier per JS eingefügt -->
                 </div>
             </div>
 
+             <!-- Bereich für Quiz Aufgaben -->
             <div id="quiz-area" class="lesson-area hidden">
-                <!-- ... (Quiz bleibt gleich) ... -->
-                 <p id="quiz-question-text">Fragetext hier...</p>
+                <p id="quiz-question-text">Fragetext hier...</p>
                 <div id="quiz-options">
+                    <!-- Quiz-Optionen (Buttons) werden hier per JS eingefügt -->
                 </div>
             </div>
 
+            <!-- Gemeinsamer Footer im Overlay -->
             <div class="overlay-footer">
-                <button id="check-button">Überprüfen</button>
-                <div id="feedback"></div>
+                <button id="check-button" disabled>Überprüfen</button> <!-- Startet deaktiviert -->
+                <div id="feedback" class="feedback"></div> <!-- Feedback Bereich -->
             </div>
         </div>
     </div>
 
+    <!-- Audio Elemente für Sounds (Pfade anpassen!) -->
     <audio id="correct-sound" src="sounds/correct.mp3" preload="auto"></audio>
     <audio id="incorrect-sound" src="sounds/incorrect.mp3" preload="auto"></audio>
-    <!-- Optional: Sound für Klick/Auswahl -->
-    <audio id="click-sound" src="sounds/click.mp3" preload="auto"></audio> <!-- Pfad anpassen! -->
+    <audio id="click-sound" src="sounds/click.mp3" preload="auto"></audio>
 
 
-    <script src="script.js"></script>
+    <!-- Link zur JavaScript-Datei (defer sorgt dafür, dass es nach dem HTML-Parsing ausgeführt wird) -->
+    <script src="script.js" defer></script>
 </body>
 </html>
