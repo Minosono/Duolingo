@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Elemente holen
-    const learningPath = document.querySelector('.learning-path');
+    // --- Elemente holen (wie vorher) ---
+    const learningPathContainer = document.querySelector('.learning-path'); // Container
     const overlay = document.getElementById('lesson-overlay');
     const closeButton = overlay.querySelector('.close-button');
     const checkButton = document.getElementById('check-button');
@@ -8,204 +8,243 @@ document.addEventListener('DOMContentLoaded', () => {
     const lessonTaskDescription = document.getElementById('lesson-task-description');
     const progressBarInner = overlay.querySelector('.progress-bar-inner');
     const heartCountSpan = overlay.querySelector('.heart-count');
-
-    // Lektionsbereiche holen
     const dragArea = document.getElementById('drag-area');
     const imageSource = document.getElementById('image-source');
-    const dropTargetContainer = document.getElementById('drop-target'); // Container für Placeholder
-
+    const dropTargetContainer = document.getElementById('drop-target');
     const quizArea = document.getElementById('quiz-area');
     const quizQuestionText = document.getElementById('quiz-question-text');
     const quizOptionsContainer = document.getElementById('quiz-options');
-
-    // Audio Elemente
     const correctSound = document.getElementById('correct-sound');
     const incorrectSound = document.getElementById('incorrect-sound');
-
-    // Orientierungs-Warnung
+    const clickSound = document.getElementById('click-sound'); // Neuer Sound
     const orientationWarning = document.getElementById('orientation-warning');
     const appContainer = document.getElementById('app-container');
+    const duoCharacter = document.getElementById('duo-character'); // Charakter-Div
 
-    // --- Lektionsdaten (erweitert) ---
+    // --- Lektionsdaten (wie vorher) ---
     const lessonData = {
+        // ... (Inhalt von lessonData bleibt gleich) ...
         lesson1: {
-            type: 'dragdrop', // Typ explizit machen
-            title: "Grundschritt lernen",
-            task: "Ordne die Phasen des Grundschritts.",
+            type: 'dragdrop', title: "Grundschritt lernen", task: "Ordne die Phasen des Grundschritts.",
             images: [
-                { id: 'step1a', src: 'images/step1a.png', correctOrder: 1 },
-                { id: 'step1b', src: 'images/step1b.png', correctOrder: 2 },
-                { id: 'step1c', src: 'images/step1c.png', correctOrder: 3 },
-            ],
-            numberOfSteps: 3 // = Anzahl der Platzhalter
+                { id: 'step1a', src: 'images/step1a.png', correctOrder: 1 }, { id: 'step1b', src: 'images/step1b.png', correctOrder: 2 }, { id: 'step1c', src: 'images/step1c.png', correctOrder: 3 },
+            ], numberOfSteps: 3
         },
         lessonQuiz1: {
-            type: 'quiz',
-            title: "Theorie-Check",
-            task: "Beantworte die Frage:",
-            questions: [ // Array für mehrere Fragen pro Quiz
-                {
-                    question: "Welcher Takt ist typisch für Walzer?",
-                    options: [
-                        { text: "4/4 Takt", correct: false },
-                        { text: "3/4 Takt", correct: true },
-                        { text: "2/4 Takt", correct: false }
-                    ]
-                },
-                {
-                    question: "Wie nennt man die Standard-Tanzhaltung?",
-                    options: [
-                        { text: "Offene Haltung", correct: false },
-                        { text: "Promenadenposition", correct: false },
-                        { text: "Geschlossene Haltung", correct: true }
-                    ]
-                }
+            type: 'quiz', title: "Theorie-Check", task: "Beantworte die Frage:",
+            questions: [
+                { question: "Welcher Takt ist typisch für Walzer?", options: [ { text: "4/4 Takt", correct: false }, { text: "3/4 Takt", correct: true }, { text: "2/4 Takt", correct: false } ] },
+                { question: "Wie nennt man die Standard-Tanzhaltung?", options: [ { text: "Offene Haltung", correct: false }, { text: "Promenadenposition", correct: false }, { text: "Geschlossene Haltung", correct: true } ] }
             ]
         },
         lesson2: {
-            type: 'dragdrop',
-            title: "Drehung üben",
-            task: "Sortiere die Schritte der Drehung.",
+            type: 'dragdrop', title: "Drehung üben", task: "Sortiere die Schritte der Drehung.",
             images: [
-                { id: 'step2a', src: 'images/step2a.png', correctOrder: 1 },
-                { id: 'step2b', src: 'images/step2b.png', correctOrder: 2 },
-                { id: 'step2c', src: 'images/step2c.png', correctOrder: 3 },
-                { id: 'step2d', src: 'images/step2d.png', correctOrder: 4 },
-            ],
-            numberOfSteps: 4
+                 { id: 'step2a', src: 'images/step2a.png', correctOrder: 1 }, { id: 'step2b', src: 'images/step2b.png', correctOrder: 2 }, { id: 'step2c', src: 'images/step2c.png', correctOrder: 3 }, { id: 'step2d', src: 'images/step2d.png', correctOrder: 4 },
+            ], numberOfSteps: 4
         },
-        // lesson3 kann bleiben wie bisher oder angepasst werden
-        lesson3: {
-            type: 'dragdrop',
-             title: "Pose einnehmen",
-             task: "Welche Schritte führen zur Pose?",
-             images: [
-                 { id: 'step3a', src: 'images/step3a.png', correctOrder: 1 },
-                 { id: 'step3b', src: 'images/step3b.png', correctOrder: 2 },
-             ],
-             numberOfSteps: 2
+         lesson3: {
+            type: 'dragdrop', title: "Pose einnehmen", task: "Welche Schritte führen zur Pose?",
+            images: [ { id: 'step3a', src: 'images/step3a.png', correctOrder: 1 }, { id: 'step3b', src: 'images/step3b.png', correctOrder: 2 }, ], numberOfSteps: 2
         },
          lessonQuiz2: {
-             type: 'quiz',
-             title: "Rhythmus-Quiz",
-             task: "Teste dein Rhythmusgefühl!",
+             type: 'quiz', title: "Rhythmus-Quiz", task: "Teste dein Rhythmusgefühl!",
              questions: [
-                 {
-                     question: "Zähle den Cha-Cha-Cha Grundrhythmus:",
-                     options: [
-                         { text: "Lang, Lang, Schnell-Schnell", correct: false },
-                         { text: "Schnell, Schnell, Lang, Lang", correct: false },
-                         { text: "2, 3, Cha-Cha-Cha (4 und 1)", correct: true },
-                         { text: "Lang, Schnell, Schnell, Lang", correct: false }
-                     ]
-                 },
-                  {
-                    question: "Welcher Tanz hat einen 'Slow, Quick, Quick' Rhythmus?",
-                    options: [
-                        { text: "Samba", correct: false },
-                        { text: "Foxtrott", correct: true },
-                        { text: "Jive", correct: false }
-                    ]
-                }
-                // Füge weitere Fragen hinzu
+                 { question: "Zähle den Cha-Cha-Cha Grundrhythmus:", options: [ { text: "Lang, Lang, Schnell-Schnell", correct: false }, { text: "Schnell, Schnell, Lang, Lang", correct: false }, { text: "2, 3, Cha-Cha-Cha (4 und 1)", correct: true }, { text: "Lang, Schnell, Schnell, Lang", correct: false } ] },
+                  { question: "Welcher Tanz hat einen 'Slow, Quick, Quick' Rhythmus?", options: [ { text: "Samba", correct: false }, { text: "Foxtrott", correct: true }, { text: "Jive", correct: false } ] }
              ]
          }
-        // Füge hier Daten für weitere Lektionen hinzu...
     };
 
-    // Zustand der aktuellen Lektion
+    // --- Zustandsvariablen ---
     let currentLessonId = null;
     let currentLessonType = null;
     let currentQuizQuestionIndex = 0;
-    let currentLessonTotalSteps = 0; // Für Fortschrittsbalken
+    let currentLessonTotalSteps = 0;
     let currentProgress = 0;
-    let selectedQuizOption = null; // Button, der im Quiz gewählt wurde
-    let lessonActive = false; // Verhindert doppeltes Öffnen
-
-    // --- Drag & Drop Zustand ---
+    let selectedQuizOption = null;
+    let lessonActive = false;
     let draggedItem = null;
+    let selectedImageForPlacement = null; // NEU: Für Klick-Platzierung
+    let completedLessons = []; // NEU: Für abgeschlossene Lektionen
 
-    // --- Orientierungs-Check ---
-    function checkOrientation() {
-        if (window.innerHeight < window.innerWidth && window.innerWidth > 768) { // Landscape auf breiter als typisches Tablet
+    // --- Konstanten für Layout ---
+    const LESSON_NODE_HEIGHT = 95; // Höhe eines Knotens (inkl. Border/Padding)
+    const CONNECTOR_BASE_HEIGHT = 40; // Basis-Höhe des Verbinders
+    const VERTICAL_SPACING = LESSON_NODE_HEIGHT + CONNECTOR_BASE_HEIGHT + 20; // Gesamter vertikaler Abstand
+    const HORIZONTAL_WAVE_AMPLITUDE = 50; // Wie weit die Welle ausschlägt (px)
+    const HORIZONTAL_WAVE_LENGTH = 4; // Nach wie vielen Nodes die Welle wiederholt
+
+    // --- localStorage Schlüssel ---
+    const COMPLETED_LESSONS_KEY = 'tanzAppCompletedLessons';
+
+    // --- Initialisierungsfunktionen ---
+
+    // Lädt erledigte Lektionen aus localStorage
+    function loadCompletedLessons() {
+        const storedData = localStorage.getItem(COMPLETED_LESSONS_KEY);
+        completedLessons = storedData ? JSON.parse(storedData) : [];
+        applyCompletionStyles();
+    }
+
+    // Speichert eine Lektion als erledigt
+    function saveCompletedLesson(lessonId) {
+        if (lessonId && !completedLessons.includes(lessonId)) {
+            completedLessons.push(lessonId);
+            localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(completedLessons));
+             // Direkt Stil anwenden, falls der Node sichtbar ist
+             const node = learningPathContainer.querySelector(`.lesson-node[data-lesson-id="${lessonId}"]`);
+             if (node) {
+                node.classList.add('lesson-completed');
+             }
+        }
+    }
+
+    // Wendet 'lesson-completed' Klasse auf Nodes an
+    function applyCompletionStyles() {
+        const lessonNodes = learningPathContainer.querySelectorAll('.lesson-node');
+        lessonNodes.forEach(node => {
+            const lessonId = node.dataset.lessonId;
+             // Entferne zuerst, falls Klasse schon da war (zur Sicherheit)
+             node.classList.remove('lesson-completed');
+            if (lessonId && completedLessons.includes(lessonId)) {
+                 // Trophäen bekommen auch die Klasse, aber kein Icon (CSS Regel)
+                node.classList.add('lesson-completed');
+            }
+        });
+    }
+
+    // Dynamisches Layout für den Lernpfad (Schlangenlinie)
+    function layoutLearningPath() {
+        const lessonNodes = Array.from(learningPathContainer.querySelectorAll('.lesson-node'));
+        const connectors = Array.from(learningPathContainer.querySelectorAll('.connector'));
+        let totalHeight = 0;
+        let connectorIndex = 0;
+
+        lessonNodes.forEach((node, index) => {
+            // Vertikale Position
+            const topPosition = index * VERTICAL_SPACING;
+            node.style.top = `${topPosition}px`;
+
+            // Horizontale Position (Welle)
+            const waveFactor = Math.sin((index / HORIZONTAL_WAVE_LENGTH) * Math.PI * 2); // Sinus für Welle
+            const horizontalOffset = waveFactor * HORIZONTAL_WAVE_AMPLITUDE;
+            node.style.transform = `translateX(calc(-50% + ${horizontalOffset}px))`;
+
+            totalHeight = topPosition + LESSON_NODE_HEIGHT; // Höhe aktualisieren
+
+             // Positioniere den Verbinder *unterhalb* dieses Knotens (falls vorhanden)
+             if (connectors[connectorIndex] && index < lessonNodes.length -1) {
+                const connector = connectors[connectorIndex];
+                const connectorTop = topPosition + LESSON_NODE_HEIGHT + 5; // Start unter dem Node
+                connector.style.top = `${connectorTop}px`;
+                connector.style.height = `${CONNECTOR_BASE_HEIGHT}px`; // Feste Höhe vorerst
+                 // Horizontale Position des Connectors anpassen, zwischen den Nodes
+                const nextNode = lessonNodes[index + 1];
+                 if(nextNode){
+                     const nextWaveFactor = Math.sin(((index + 1) / HORIZONTAL_WAVE_LENGTH) * Math.PI * 2);
+                     const nextHorizontalOffset = nextWaveFactor * HORIZONTAL_WAVE_AMPLITUDE;
+                     // Mittelwert der Offsets für den Verbinder
+                     const avgHorizontalOffset = (horizontalOffset + nextHorizontalOffset) / 2;
+                      connector.style.transform = `translateX(calc(-50% + ${avgHorizontalOffset}px))`;
+                 } else {
+                     connector.style.transform = `translateX(calc(-50% + ${horizontalOffset}px))`; // Am letzten orientieren
+                 }
+
+
+                connectorIndex++;
+            }
+        });
+
+        // Setze die Gesamthöhe des Containers, damit gescrollt werden kann
+        learningPathContainer.style.height = `${totalHeight + 50}px`; // Extra Platz am Ende
+    }
+
+    // --- Orientierungs-Check (wie vorher) ---
+    function checkOrientation() { /* ... bleibt gleich ... */
+         if (window.innerHeight < window.innerWidth && window.innerWidth > 768) {
             orientationWarning.classList.remove('hidden');
-            appContainer.classList.add('hidden'); // Haupt-App ausblenden
+            appContainer.classList.add('hidden');
         } else {
             orientationWarning.classList.add('hidden');
-            appContainer.classList.remove('hidden'); // Haupt-App anzeigen
+            appContainer.classList.remove('hidden');
         }
     }
 
     // --- Event Listener ---
+    // Lektionen anklicken (wie vorher, aber checkt lessonActive)
+    learningPathContainer.addEventListener('click', (event) => {
+        const lessonNode = event.target.closest('.lesson-node:not(.type-trophy)');
+        if (lessonNode && !lessonActive) { // Nur starten, wenn keine Lektion aktiv ist
+             if (completedLessons.includes(lessonNode.dataset.lessonId)) {
+                  console.log("Lektion bereits abgeschlossen."); // Optional: Feedback oder erneutes Spielen erlauben?
+                 // return; // Verhindert Start, wenn erledigt. Auskommentieren, um erneutes Spielen zu erlauben.
+             }
 
-    // Lektionen im Lernpfad anklicken
-    learningPath.addEventListener('click', (event) => {
-        const lessonNode = event.target.closest('.lesson-node:not(.type-trophy)'); // Trophäen nicht klickbar
-        if (lessonNode && !lessonActive) {
             lessonActive = true;
             currentLessonId = lessonNode.dataset.lessonId;
             const lesson = lessonData[currentLessonId];
             if (lesson) {
                  currentLessonType = lesson.type;
-                 // Bestimme Gesamtschritte für Fortschrittsbalken
-                 if(currentLessonType === 'quiz'){
-                    currentLessonTotalSteps = lesson.questions.length;
-                 } else if (currentLessonType === 'dragdrop'){
-                     currentLessonTotalSteps = 1; // DragDrop zählt als ein Schritt
-                 } else {
-                     currentLessonTotalSteps = 0;
-                 }
-                 currentQuizQuestionIndex = 0; // Reset für Quiz
-                 currentProgress = 0; // Reset für Fortschritt
-                 updateProgressBar(); // Auf 0 setzen
-                 loadLessonContent();
-                 openOverlay();
-            } else {
-                 console.error("Lektionsdaten nicht gefunden für:", currentLessonId);
-                 lessonActive = false;
-            }
+                 // Reset und Lade Logik (wie vorher)
+                if(currentLessonType === 'quiz'){ currentLessonTotalSteps = lesson.questions.length; }
+                else if (currentLessonType === 'dragdrop'){ currentLessonTotalSteps = 1; }
+                else { currentLessonTotalSteps = 0; }
+                currentQuizQuestionIndex = 0;
+                currentProgress = 0;
+                updateProgressBar();
+                loadLessonContent();
+                openOverlay();
+            } else { console.error("Lektionsdaten nicht gefunden:", currentLessonId); lessonActive = false; }
         }
     });
 
-    // Overlay schließen
+    // Overlay schließen (wie vorher, aber setzt Click-Auswahl zurück)
     closeButton.addEventListener('click', closeOverlay);
-    // Klick ausserhalb des Contents schliesst nicht (im Gegensatz zu vorher)
 
-    // Überprüfen-Button
+    // Überprüfen-Button (Handler bleibt gleich)
     checkButton.addEventListener('click', handleCheck);
 
-    // Fenstergröße ändern (für Orientierung)
-    window.addEventListener('resize', checkOrientation);
+    // Fenstergröße ändern (wie vorher)
+    window.addEventListener('resize', () => {
+        checkOrientation();
+         layoutLearningPath(); // Neu layouten bei Resize
+    });
 
-    // --- Overlay öffnen / schließen ---
-    function openOverlay() {
-        // Setze "unendlich" Herzen oder eine Zahl (hier hardcoded für Demo)
-        heartCountSpan.innerHTML = '<i class="fas fa-infinity"></i>'; // Oder z.B. '5'
+    // --- Click-to-Place Listener ---
+    // Hinzugefügt in setupDragDropLesson
+
+    // --- Overlay öffnen/schließen (wie vorher) ---
+    function openOverlay() { /* ... bleibt gleich ... */
+        heartCountSpan.innerHTML = '<i class="fas fa-infinity"></i>';
         overlay.classList.remove('hidden');
-    }
-
-    function closeOverlay() {
+     }
+    function closeOverlay() { /* ... Modifiziert ... */
         overlay.classList.add('hidden');
-        feedbackDiv.classList.remove('visible'); // Feedback ausblenden
-        // Reset nach Schließen, damit es sauber ist beim nächsten Öffnen
-        setTimeout(() => { // Kleine Verzögerung, damit Ausblenden fertig ist
+        feedbackDiv.classList.remove('visible');
+         // Auswahl zurücksetzen
+         if (selectedImageForPlacement) {
+            selectedImageForPlacement.classList.remove('selected-for-placement');
+            selectedImageForPlacement = null;
+         }
+         removeTargetableClassFromPlaceholders(); // Highlight von Zielen entfernen
+        setTimeout(() => {
             resetLessonState();
-             lessonActive = false;
-        }, 300); // Muss zur CSS transition passen
+            lessonActive = false;
+        }, 300);
     }
 
-    // --- Lektionsinhalt laden ---
-    function loadLessonContent() {
-        const data = lessonData[currentLessonId];
+    // --- Lektionsinhalt laden (wie vorher) ---
+    function loadLessonContent() { /* ... bleibt gleich ... */
+         const data = lessonData[currentLessonId];
         if (!data) return;
 
-        lessonTaskDescription.textContent = data.task || data.title; // Aufgabenstellung oder Titel anzeigen
-        resetInteractionAreas(); // Alte Inhalte/Listener löschen
-        checkButton.disabled = true; // Erst aktivieren, wenn interagiert wurde
+        lessonTaskDescription.textContent = data.task || data.title;
+        resetInteractionAreas();
+        checkButton.disabled = true;
         feedbackDiv.classList.remove('visible');
-        feedbackDiv.className = 'feedback'; // Nur Basisklasse
+        feedbackDiv.className = 'feedback';
 
-        // Je nach Lektionstyp den richtigen Bereich anzeigen und befüllen
         if (currentLessonType === 'dragdrop') {
             dragArea.classList.remove('hidden');
             quizArea.classList.add('hidden');
@@ -217,9 +256,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Drag & Drop Lektion vorbereiten ---
+    // --- Drag & Drop Lektion vorbereiten (ERWEITERT für Click-to-Place) ---
     function setupDragDropLesson(data) {
-        // Bilderquelle (gemischt)
+        // ... (Bilderquelle und Platzhalter generieren wie vorher) ...
+         // Bilderquelle (gemischt)
         imageSource.innerHTML = '<p>Verfügbare Schritte:</p>'; // Leeren
         const shuffledImages = [...data.images].sort(() => Math.random() - 0.5);
         shuffledImages.forEach(imgData => {
@@ -230,6 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
             img.className = 'dance-step-img';
             img.draggable = true;
             img.dataset.correctOrder = imgData.correctOrder;
+            // NEU: Click Listener für Bildauswahl
+            img.addEventListener('click', handleSourceImageClick);
             imageSource.appendChild(img);
         });
 
@@ -239,350 +281,381 @@ document.addEventListener('DOMContentLoaded', () => {
             const placeholder = document.createElement('div');
             placeholder.className = 'drop-placeholder';
             placeholder.dataset.order = i;
-            placeholder.textContent = i; // Nummer anzeigen
+            placeholder.textContent = i;
+            // NEU: Click Listener für Platzhalter-Ziel
+            placeholder.addEventListener('click', handlePlaceholderClick);
             dropTargetContainer.appendChild(placeholder);
         }
 
-        addDragAndDropListeners();
+        addDragAndDropListeners(); // Fügt auch die Drag-Listener hinzu
     }
 
-     // --- Quiz Lektion vorbereiten ---
-    function setupQuizLesson(data) {
-         displayQuizQuestion(data.questions[currentQuizQuestionIndex]);
-         checkButton.disabled = true; // Deaktivieren, bis eine Option gewählt wird
+    // --- Quiz Lektion vorbereiten (wie vorher) ---
+    function setupQuizLesson(data) { /* ... bleibt gleich ... */
+        displayQuizQuestion(data.questions[currentQuizQuestionIndex]);
+         checkButton.disabled = true;
     }
 
-     // --- Quiz Frage anzeigen ---
-    function displayQuizQuestion(questionData) {
-         if (!questionData) {
-             console.error("Keine Quizfrage gefunden für Index:", currentQuizQuestionIndex);
-             // Vielleicht Lektion beendet? Hier könnte man eine Zusammenfassung zeigen.
-             return;
-         }
-         quizQuestionText.textContent = questionData.question;
-         quizOptionsContainer.innerHTML = ''; // Alte Optionen entfernen
-         selectedQuizOption = null; // Auswahl zurücksetzen
-
-         // Optionen mischen (optional, aber besser für's Lernen)
-         const shuffledOptions = [...questionData.options].sort(() => Math.random() - 0.5);
-
+    // --- Quiz Frage anzeigen (wie vorher) ---
+    function displayQuizQuestion(questionData) { /* ... bleibt gleich ... */
+        if (!questionData) return;
+        quizQuestionText.textContent = questionData.question;
+        quizOptionsContainer.innerHTML = '';
+        selectedQuizOption = null;
+        const shuffledOptions = [...questionData.options].sort(() => Math.random() - 0.5);
          shuffledOptions.forEach(option => {
-             const button = document.createElement('button');
-             button.className = 'quiz-option-button';
-             button.textContent = option.text;
-             // Wichtig: Information speichern, ob die Option korrekt ist
-             button.dataset.correct = option.correct;
-             button.addEventListener('click', handleQuizOptionSelect);
-             quizOptionsContainer.appendChild(button);
-         });
-         checkButton.disabled = true; // Erneut deaktivieren für neue Frage
-     }
+            const button = document.createElement('button');
+            button.className = 'quiz-option-button';
+            button.textContent = option.text;
+            button.dataset.correct = option.correct;
+            button.addEventListener('click', handleQuizOptionSelect);
+            quizOptionsContainer.appendChild(button);
+        });
+        checkButton.disabled = true;
+    }
 
-    // --- Quiz Option auswählen ---
-    function handleQuizOptionSelect(event) {
-        const selectedButton = event.target;
-
-        // Alte Auswahl deselektieren
-         if (selectedQuizOption) {
-             selectedQuizOption.classList.remove('selected');
-         }
-
-         // Neue Auswahl markieren
+    // --- Quiz Option auswählen (wie vorher) ---
+    function handleQuizOptionSelect(event) { /* ... bleibt gleich ... */
+         const selectedButton = event.target;
+         if (selectedQuizOption) { selectedQuizOption.classList.remove('selected'); }
          selectedButton.classList.add('selected');
          selectedQuizOption = selectedButton;
-
-         checkButton.disabled = false; // Button aktivieren
-         // Optional: Sound für Klick spielen
+         checkButton.disabled = false;
     }
 
+    // --- NEU: Handler für Klick auf Quell-Bild ---
+    function handleSourceImageClick(event) {
+        const clickedImage = event.target;
+         // Nur reagieren, wenn das Bild in der Quelle ist
+        if (!clickedImage.closest('#image-source')) return;
 
-    // --- Handler für "Überprüfen" Button ---
-    function handleCheck() {
-         if (currentLessonType === 'dragdrop') {
-             checkDragDrop();
-         } else if (currentLessonType === 'quiz') {
-             checkQuizAnswer();
+         try { clickSound.play().catch(e => {}); } catch(e) {} // Klick-Sound
+
+        // Wenn bereits dieses Bild ausgewählt war -> Auswahl aufheben
+        if (selectedImageForPlacement === clickedImage) {
+            clickedImage.classList.remove('selected-for-placement');
+            selectedImageForPlacement = null;
+            removeTargetableClassFromPlaceholders(); // Ziele nicht mehr hervorheben
+        } else {
+            // Anderes Bild war ausgewählt -> Alte Auswahl aufheben
+            if (selectedImageForPlacement) {
+                selectedImageForPlacement.classList.remove('selected-for-placement');
+            }
+            // Neues Bild auswählen
+            clickedImage.classList.add('selected-for-placement');
+            selectedImageForPlacement = clickedImage;
+            addTargetableClassToEmptyPlaceholders(); // Leere Ziele hervorheben
+        }
+    }
+
+     // --- NEU: Handler für Klick auf Platzhalter ---
+    function handlePlaceholderClick(event) {
+        const clickedPlaceholder = event.target.closest('.drop-placeholder');
+        if (!clickedPlaceholder) return;
+
+         // Nur reagieren, wenn ein Bild ausgewählt IST und der Platzhalter LEER ist
+        if (selectedImageForPlacement && !clickedPlaceholder.querySelector('.dance-step-img')) {
+             try { clickSound.play().catch(e => {}); } catch(e) {} // Klick-Sound
+
+             // Bild in Platzhalter verschieben
+            clickedPlaceholder.innerHTML = ''; // Nummer entfernen
+            clickedPlaceholder.appendChild(selectedImageForPlacement);
+
+            // Auswahl aufheben
+            selectedImageForPlacement.classList.remove('selected-for-placement');
+            selectedImageForPlacement = null;
+            removeTargetableClassFromPlaceholders();
+
+            // Check-Button Status aktualisieren
+            checkButton.disabled = !areAllPlaceholdersFilled();
+        }
+         // Optional: Wenn ein Bild im Placeholder angeklickt wird -> zurück in Quelle?
+         else if (!selectedImageForPlacement && clickedPlaceholder.querySelector('.dance-step-img')) {
+            const imageInPlaceholder = clickedPlaceholder.querySelector('.dance-step-img');
+             try { clickSound.play().catch(e => {}); } catch(e) {}
+
+             // Bild zurück zur Quelle
+            const pTag = imageSource.querySelector('p');
+            imageSource.insertBefore(imageInPlaceholder, pTag.nextSibling);
+
+             // Placeholder zurücksetzen
+             clickedPlaceholder.innerHTML = clickedPlaceholder.dataset.order; // Nummer wiederherstellen
+
+             checkButton.disabled = true; // Check nicht mehr möglich
          }
-         checkButton.disabled = true; // Nach dem Check wieder deaktivieren
-     }
+    }
 
-     // --- Drag & Drop Überprüfung ---
-     function checkDragDrop() {
-         const data = lessonData[currentLessonId];
-         if (!data) return;
+    // --- NEU: Hilfsfunktionen für Klick-Platzierung ---
+    function addTargetableClassToEmptyPlaceholders() {
+        const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
+        placeholders.forEach(p => {
+            if (!p.querySelector('.dance-step-img')) {
+                p.classList.add('targetable');
+            } else {
+                 p.classList.remove('targetable'); // Sicherstellen, dass belegte nicht targetable sind
+            }
+        });
+    }
+    function removeTargetableClassFromPlaceholders() {
+        const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
+        placeholders.forEach(p => p.classList.remove('targetable'));
+    }
 
-         let isCorrect = true;
+    // --- Handler für "Überprüfen" Button (wie vorher) ---
+    function handleCheck() { /* ... bleibt gleich ... */
+         if (currentLessonType === 'dragdrop') { checkDragDrop(); }
+         else if (currentLessonType === 'quiz') { checkQuizAnswer(); }
+         checkButton.disabled = true;
+    }
+
+    // --- Drag & Drop Überprüfung (MODIFIZIERT für Reset bei Fehler) ---
+    function checkDragDrop() {
+        const data = lessonData[currentLessonId];
+        if (!data) return;
+        let isCorrect = true;
+        // ... (Überprüfungslogik wie vorher) ...
          const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
-
-         if (placeholders.length !== data.numberOfSteps) {
-              console.error("Anzahl der Platzhalter stimmt nicht überein!");
-              isCorrect = false;
-         } else {
+         if (placeholders.length !== data.numberOfSteps) { isCorrect = false; }
+         else {
              placeholders.forEach(placeholder => {
                  const img = placeholder.querySelector('.dance-step-img');
                  const placeholderOrder = parseInt(placeholder.dataset.order, 10);
-
-                 if (!img || parseInt(img.dataset.correctOrder, 10) !== placeholderOrder) {
-                     isCorrect = false;
-                 }
+                 if (!img || parseInt(img.dataset.correctOrder, 10) !== placeholderOrder) { isCorrect = false; }
              });
-             // Prüfen, ob auch alle Bilder verwendet wurden (keine mehr in der Source sind)
-             if (imageSource.querySelectorAll('.dance-step-img').length > 0){
-                 isCorrect = false;
-             }
+             if (imageSource.querySelectorAll('.dance-step-img').length > 0){ isCorrect = false; }
          }
 
+        showFeedback(isCorrect); // Feedback anzeigen (ruft auch Sound auf)
 
-         showFeedback(isCorrect);
+        if (isCorrect) {
+            currentProgress++;
+            updateProgressBar();
+            saveCompletedLesson(currentLessonId); // NEU: Als erledigt speichern
+            setTimeout(closeOverlay, 1500);
+        } else {
+            // NEU: Bei Fehler -> Reset nach kurzer Anzeige
+            setTimeout(resetDragDropArea, 1200); // 1.2 Sekunden warten
+        }
+    }
 
-         if (isCorrect) {
-             currentProgress++;
-             updateProgressBar();
-             // Drag&Drop ist oft nur 1 Schritt, daher hier direkt zum Schließen
-             setTimeout(closeOverlay, 1500);
-         } else {
-            // Optional: Fehlerhafte Elemente hervorheben
+    // --- NEU: Funktion zum Zurücksetzen des Drag&Drop-Bereichs ---
+    function resetDragDropArea() {
+        feedbackDiv.classList.remove('visible'); // Feedback wieder ausblenden
+        const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
+        const pTagSource = imageSource.querySelector('p');
+
+        placeholders.forEach(p => {
+            const img = p.querySelector('.dance-step-img');
+            if (img) {
+                // Bild zurück zur Quelle bewegen
+                 imageSource.insertBefore(img, pTagSource.nextSibling);
+            }
+             // Platzhalter Text wiederherstellen
+            p.innerHTML = p.dataset.order;
+        });
+
+         // Check-Button wieder deaktivieren
+         checkButton.disabled = true;
+
+         // Falls ein Bild per Klick ausgewählt war, Auswahl aufheben
+         if (selectedImageForPlacement) {
+            selectedImageForPlacement.classList.remove('selected-for-placement');
+            selectedImageForPlacement = null;
          }
-     }
+         removeTargetableClassFromPlaceholders();
+    }
 
-     // --- Quiz Antwort überprüfen ---
+    // --- Quiz Antwort überprüfen (MODIFIZIERT für Speichern bei Erfolg) ---
     function checkQuizAnswer() {
-         if (!selectedQuizOption) return; // Sollte nicht passieren, da Button deaktiviert ist
-
+        if (!selectedQuizOption) return;
         const isCorrect = selectedQuizOption.dataset.correct === 'true';
-        const allOptionButtons = quizOptionsContainer.querySelectorAll('.quiz-option-button');
-
-        // Visuelles Feedback auf Buttons geben
+         // ... (Button Feedback wie vorher) ...
+         const allOptionButtons = quizOptionsContainer.querySelectorAll('.quiz-option-button');
          allOptionButtons.forEach(button => {
-             button.disabled = true; // Keine weiteren Klicks zulassen
-             button.classList.remove('selected'); // Auswahl-Markierung entfernen
-             if (button.dataset.correct === 'true') {
-                 button.classList.add('correct'); // Korrekte Antwort grün markieren
-             } else if (button === selectedQuizOption && !isCorrect) {
-                 button.classList.add('incorrect'); // Falsch gewählte Antwort rot markieren
-             }
+             button.disabled = true;
+             button.classList.remove('selected');
+             if (button.dataset.correct === 'true') { button.classList.add('correct'); }
+             else if (button === selectedQuizOption && !isCorrect) { button.classList.add('incorrect'); }
          });
-
 
         showFeedback(isCorrect);
 
-         if (isCorrect) {
-             currentProgress++;
-             updateProgressBar();
-             // Nächste Frage laden oder Lektion beenden
-             currentQuizQuestionIndex++;
-             const data = lessonData[currentLessonId];
-             if (currentQuizQuestionIndex < data.questions.length) {
-                 // Kurze Pause, dann nächste Frage
-                 setTimeout(() => {
-                      feedbackDiv.classList.remove('visible'); // Feedback ausblenden
-                     displayQuizQuestion(data.questions[currentQuizQuestionIndex]);
-                 }, 1500); // Wartezeit nach korrektem Feedback
-             } else {
-                 // Lektion abgeschlossen
-                 setTimeout(closeOverlay, 1500); // Schließe nach letzter Frage
-             }
-         } else {
-             // Optional: Herzen abziehen etc.
-             // Hier: Nur Feedback anzeigen, User muss Lektion evtl. neu starten oder korrigieren (je nach Design)
-             // Fürs erste: Nichts tun, Feedback bleibt sichtbar, bis geschlossen wird.
-         }
+        if (isCorrect) {
+            currentProgress++;
+            updateProgressBar();
+            currentQuizQuestionIndex++;
+            const data = lessonData[currentLessonId];
+            if (currentQuizQuestionIndex < data.questions.length) {
+                setTimeout(() => {
+                    feedbackDiv.classList.remove('visible');
+                    displayQuizQuestion(data.questions[currentQuizQuestionIndex]);
+                }, 1500);
+            } else {
+                saveCompletedLesson(currentLessonId); // NEU: Als erledigt speichern (am Ende)
+                setTimeout(closeOverlay, 1500);
+            }
+        } else {
+            // Bei falscher Quiz-Antwort: Hier nichts resetten, User muss schließen oder es neu versuchen
+            // (Könnte man ändern, z.B. Herzen abziehen und Frage wiederholen)
+        }
     }
 
-    // --- Feedback anzeigen und Sound spielen ---
-    function showFeedback(isCorrect) {
+    // --- Feedback anzeigen und Sound spielen (wie vorher) ---
+    function showFeedback(isCorrect) { /* ... bleibt gleich ... */
         feedbackDiv.textContent = isCorrect ? 'Sehr gut!' : 'Das ist nicht ganz richtig.';
         feedbackDiv.className = 'feedback'; // Reset
         feedbackDiv.classList.add(isCorrect ? 'feedback-correct' : 'feedback-incorrect');
-        feedbackDiv.classList.add('visible'); // Sichtbar machen
-
-         // Passenden Sound abspielen
+        feedbackDiv.classList.add('visible');
          try {
-             if (isCorrect) {
-                correctSound.currentTime = 0; // Zurückspulen falls noch spielt
-                correctSound.play();
-             } else {
-                incorrectSound.currentTime = 0;
-                incorrectSound.play();
-             }
-         } catch (error) {
-             console.error("Fehler beim Abspielen des Sounds:", error);
-             // Oft auf Mobilgeräten: Nutzerinteraktion nötig, bevor Sound geht
-         }
+             if (isCorrect) { correctSound.play().catch(e => {}); }
+             else { incorrectSound.play().catch(e => {}); }
+         } catch (error) { console.error("Sound Fehler:", error); }
+     }
+
+    // --- Fortschrittsbalken aktualisieren (wie vorher) ---
+    function updateProgressBar() { /* ... bleibt gleich ... */
+        const percentage = currentLessonTotalSteps > 0 ? (currentProgress / currentLessonTotalSteps) * 100 : 0;
+         progressBarInner.style.width = `${Math.max(10, percentage)}%`;
     }
 
-    // --- Fortschrittsbalken aktualisieren ---
-    function updateProgressBar() {
-         const percentage = currentLessonTotalSteps > 0 ? (currentProgress / currentLessonTotalSteps) * 100 : 0;
-         progressBarInner.style.width = `${Math.max(10, percentage)}%`; // Mind. 10% damit man was sieht
+    // --- Lektionszustand zurücksetzen (wie vorher) ---
+    function resetLessonState() { /* ... bleibt gleich ... */
+         resetInteractionAreas();
+        currentLessonId = null; currentLessonType = null; currentQuizQuestionIndex = 0;
+        selectedQuizOption = null; draggedItem = null; selectedImageForPlacement = null; // Click-Auswahl zurücksetzen
+        feedbackDiv.className = 'feedback'; feedbackDiv.classList.remove('visible');
+        progressBarInner.style.width = '0%'; checkButton.disabled = true;
+        lessonActive = false;
     }
 
-
-    // --- Lektionszustand zurücksetzen ---
-    function resetLessonState() {
-        resetInteractionAreas();
-        currentLessonId = null;
-        currentLessonType = null;
-        currentQuizQuestionIndex = 0;
-        selectedQuizOption = null;
-        feedbackDiv.className = 'feedback';
-        feedbackDiv.classList.remove('visible');
-        progressBarInner.style.width = '0%';
-        checkButton.disabled = true;
-        lessonActive = false; // Wichtig
-    }
-
-    // --- Interaktionsbereiche leeren ---
-    function resetInteractionAreas() {
-        // Drag&Drop Bereich
+    // --- Interaktionsbereiche leeren (wie vorher) ---
+    function resetInteractionAreas() { /* ... bleibt gleich ... */
         imageSource.innerHTML = '<p>Verfügbare Schritte:</p>';
         dropTargetContainer.innerHTML = '<p>Deine Reihenfolge:</p>';
-        removeDragAndDropListeners(); // Alte Listener sicher entfernen
-
-        // Quiz Bereich
+        removeDragAndDropListeners();
         quizQuestionText.textContent = '';
         quizOptionsContainer.innerHTML = '';
-
-        // Bereiche wieder verstecken
         dragArea.classList.add('hidden');
         quizArea.classList.add('hidden');
     }
 
-
-    // --- Drag & Drop Event Listener hinzufügen / entfernen ---
-    // (Etwas komplexer wegen dynamischer Elemente und cleanup)
+    // --- Drag & Drop Event Listener (wie vorher, Co-Existenz mit Klick) ---
+    // dragStart, dragEnd, dragOver, dragLeave, drop Funktionen bleiben weitgehend gleich
     let currentDraggables = [];
     let currentDropzones = [];
-    const sourceZone = imageSource; // Die Quellzone ist auch ein Dropzone
+    const sourceZone = imageSource;
 
      function dragStart(event) {
-        draggedItem = event.target;
-        event.dataTransfer.setData('text/plain', event.target.id);
-         // Verzögertes Styling, um Drag-Effekt zu ermöglichen
-        setTimeout(() => {
-            if (draggedItem) draggedItem.classList.add('dragging');
-        }, 0);
-     }
-
-    function dragEnd() {
-         if (draggedItem) {
-            draggedItem.classList.remove('dragging');
+         // Wenn ein Bild per Klick ausgewählt ist, Auswahl aufheben beim Ziehen
+         if (selectedImageForPlacement) {
+             selectedImageForPlacement.classList.remove('selected-for-placement');
+             selectedImageForPlacement = null;
+             removeTargetableClassFromPlaceholders();
          }
-         // Alle drag-over Effekte entfernen, falls hängen geblieben
-          currentDropzones.forEach(zone => zone.classList.remove('drag-over'));
-          sourceZone.classList.remove('drag-over'); // Auch Quelle zurücksetzen
+
+         draggedItem = event.target;
+         event.dataTransfer.setData('text/plain', event.target.id);
+         setTimeout(() => { if (draggedItem) draggedItem.classList.add('dragging'); }, 0);
+     }
+     function dragEnd() {
+         if (draggedItem) { draggedItem.classList.remove('dragging'); }
+          const allZones = [...dropTargetContainer.querySelectorAll('.drop-placeholder'), sourceZone];
+          allZones.forEach(zone => zone.classList.remove('drag-over'));
           draggedItem = null;
      }
+      function dragOver(event) {
+         event.preventDefault();
+         const targetPotential = event.target;
+         const targetZone = targetPotential.closest('.drop-placeholder, #image-source');
+         if (!targetZone) return;
 
+         // Highlight entfernen von allen anderen
+          const allZones = [...dropTargetContainer.querySelectorAll('.drop-placeholder'), sourceZone];
+          allZones.forEach(zone => { if(zone !== targetZone) zone.classList.remove('drag-over');});
 
-     function dragOver(event) {
-         event.preventDefault(); // Erlaubt das Droppen
+         // Highlight auf Ziel setzen (wenn es leer ist oder die Quelle)
+         if (targetZone.classList.contains('drop-placeholder')) {
+            if(!targetZone.querySelector('.dance-step-img')) { // Nur leere hervorheben
+                 targetZone.classList.add('drag-over');
+            }
+         } else if (targetZone.id === 'image-source') {
+              targetZone.classList.add('drag-over');
+         }
+
+     }
+      function dragLeave(event) {
+        const zone = event.target.closest('.drop-placeholder, #image-source');
+        if(zone && !zone.contains(event.relatedTarget)) { // Verlassen wenn Maus wirklich raus geht
+             zone.classList.remove('drag-over');
+        }
+      }
+
+     function drop(event) {
+         event.preventDefault();
          const targetZone = event.target.closest('.drop-placeholder, #image-source');
-         if (targetZone && targetZone.classList.contains('drop-placeholder')) {
-            // Alte Highlights entfernen und neues setzen
-            currentDropzones.forEach(zone => zone.classList.remove('drag-over'));
-            targetZone.classList.add('drag-over');
-         } else if (targetZone && targetZone.id === 'image-source') {
-            // Highlight für Quellzone (optional)
-             currentDropzones.forEach(zone => zone.classList.remove('drag-over')); // Andere deselektieren
-             targetZone.classList.add('drag-over');
+         if (targetZone && draggedItem) {
+             targetZone.classList.remove('drag-over');
+
+             if (targetZone.classList.contains('drop-placeholder')) {
+                 if (!targetZone.querySelector('.dance-step-img')) { // Nur in leere droppen
+                     targetZone.innerHTML = '';
+                     targetZone.appendChild(draggedItem);
+                     checkButton.disabled = !areAllPlaceholdersFilled();
+                 }
+             } else if (targetZone.id === 'image-source') {
+                 const pTag = targetZone.querySelector('p');
+                 targetZone.insertBefore(draggedItem, pTag.nextSibling);
+                 checkButton.disabled = true;
+             }
          }
      }
+    // Hilfsfunktion areAllPlaceholdersFilled bleibt gleich
+     function areAllPlaceholdersFilled() { /* ... bleibt gleich ... */
+         const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
+         if (placeholders.length === 0) return false;
+         return Array.from(placeholders).every(p => p.querySelector('.dance-step-img'));
+     }
 
-    function dragLeave(event) {
-        // Nur Highlight entfernen, wenn man das Element *verlässt*
-        // Dies wird komplexer bei verschachtelten Elementen, dragOver ist oft robuster
-        const relatedTarget = event.relatedTarget;
-        const targetZone = event.target.closest('.drop-placeholder, #image-source');
-
-        // Wenn die Maus zu einem Element außerhalb der Zone oder keinem gültigen Ziel geht
-        if (targetZone && (!relatedTarget || !targetZone.contains(relatedTarget))) {
-            targetZone.classList.remove('drag-over');
-        }
-    }
-
-
-    function drop(event) {
-        event.preventDefault();
-        const targetZone = event.target.closest('.drop-placeholder, #image-source');
-
-        if (targetZone && draggedItem) {
-            targetZone.classList.remove('drag-over'); // Highlight weg
-
-            if (targetZone.classList.contains('drop-placeholder')) {
-                // Nur ein Element pro Platzhalter erlauben
-                if (!targetZone.querySelector('.dance-step-img')) {
-                    targetZone.innerHTML = ''; // Nummer entfernen
-                    targetZone.appendChild(draggedItem);
-                    checkButton.disabled = !areAllPlaceholdersFilled(); // Check-Button ggf. aktivieren
-                } else {
-                    // Platzhalter schon belegt, nichts tun oder Item zurückschicken?
-                    // Einfachste Variante: nichts tun. Das Element bleibt, wo es war.
-                    console.log("Platzhalter belegt.");
-                 }
-            } else if (targetZone.id === 'image-source') {
-                // Zurück zur Quelle legen
-                 const pTag = targetZone.querySelector('p');
-                 targetZone.insertBefore(draggedItem, pTag.nextSibling); // Nach dem p-Tag
-                 checkButton.disabled = true; // Wenn etwas zurückgelegt wird, kann nicht mehr korrekt sein
-            }
-        }
-        // dragEnd() wird automatisch aufgerufen und räumt auf.
-    }
-
-    // Hilfsfunktion: Prüft, ob alle Drop-Zonen gefüllt sind
-    function areAllPlaceholdersFilled() {
-        const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
-        if (placeholders.length === 0) return false; // Keine Plaetzhalter da
-        let allFilled = true;
-        placeholders.forEach(p => {
-            if (!p.querySelector('.dance-step-img')) {
-                allFilled = false;
-            }
-        });
-        return allFilled;
-    }
-
-
-    function addDragAndDropListeners() {
-         removeDragAndDropListeners(); // Sicherstellen, dass keine alten Listener da sind
+    function addDragAndDropListeners() { /* ... (wie vorher, aber selektiert Elemente neu) ... */
+         removeDragAndDropListeners(); // Alte entfernen!
 
          currentDraggables = Array.from(imageSource.querySelectorAll('.dance-step-img'));
          currentDropzones = Array.from(dropTargetContainer.querySelectorAll('.drop-placeholder'));
 
          currentDraggables.forEach(draggable => {
              draggable.addEventListener('dragstart', dragStart);
-             draggable.addEventListener('dragend', dragEnd); // Wichtig zum Aufräumen
+             draggable.addEventListener('dragend', dragEnd);
          });
 
-        // Event Listener für Drop Zones (Platzhalter + Quelle)
-        const allZones = [...currentDropzones, sourceZone];
+         const allZones = [...currentDropzones, sourceZone];
          allZones.forEach(zone => {
              zone.addEventListener('dragover', dragOver);
-             zone.addEventListener('dragleave', dragLeave); // Kann problematisch sein, siehe oben
+             zone.addEventListener('dragleave', dragLeave);
              zone.addEventListener('drop', drop);
          });
     }
-
-    function removeDragAndDropListeners() {
-        // Alte Listener entfernen (wichtig bei dynamischer Generierung!)
-        currentDraggables.forEach(draggable => {
+     function removeDragAndDropListeners() { /* ... (wie vorher) ... */
+          // Entfernt Listener von currentDraggables und currentDropzones + sourceZone
+          currentDraggables.forEach(draggable => {
              draggable.removeEventListener('dragstart', dragStart);
-              draggable.removeEventListener('dragend', dragEnd);
+             draggable.removeEventListener('dragend', dragEnd);
+              draggable.removeEventListener('click', handleSourceImageClick); // Auch Klick-Listener entfernen
          });
          const allZones = [...currentDropzones, sourceZone];
          allZones.forEach(zone => {
              zone.removeEventListener('dragover', dragOver);
              zone.removeEventListener('dragleave', dragLeave);
              zone.removeEventListener('drop', drop);
+              zone.removeEventListener('click', handlePlaceholderClick); // Klick-Listener von Platzhaltern entfernen
          });
          currentDraggables = [];
-         currentDropzones = [];
-    }
-
+         currentDropzones = []; // Wichtig: Arrays leeren
+     }
 
     // --- Initialisierung ---
-    checkOrientation(); // Beim Laden prüfen
-    resetLessonState(); // Sicherstellen, dass alles sauber ist
+    checkOrientation();
+    loadCompletedLessons(); // Erledigte Lektionen laden
+    layoutLearningPath();   // Lernpfad layouten
+    resetLessonState();
 
 });
