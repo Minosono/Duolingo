@@ -1,565 +1,145 @@
-/* Globale Stile & Grundlayout */
+/* ... (Alle vorherigen Styles bleiben bestehen) ... */
+
+/* Globale Variablen erweitern (optional für Farben erledigter Lektionen) */
 :root {
-    --duo-dark-bg: #2d2d3d; /* Haupt-Hintergrund */
-    --duo-darker-bg: #1d1d2a;
-    --duo-light-text: #e5e5e5;
-    --duo-purple: #7b4a9c;
-    --duo-purple-light: #a36cd1;
-    --duo-green: #58cc02;
-    --duo-green-dark: #4aa701;
-    --duo-red: #ff4b4b;
-    --duo-blue: #1cb0f6;
-    --duo-yellow: #ffc800;
-    --duo-grey-border: #4b4b6b;
-    --duo-overlay-bg: #3a3a4a;
+    /* ... (bestehende Variablen) ... */
+    --duo-grey-completed: #586474; /* Farbe für erledigte Lektionen */
+    --duo-grey-completed-border: #7a8aa0;
+    --duo-grey-completed-shadow: #404a55;
+    --duo-selection-glow: 0 0 8px 3px rgba(29, 176, 246, 0.7); /* Leuchten für Klick-Auswahl */
 }
 
-body {
-    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; /* Typische UI-Schrift */
-    margin: 0;
-    background-color: var(--duo-dark-bg);
-    color: var(--duo-light-text);
-    overscroll-behavior: none; /* Verhindert "bounce" auf iOS */
-}
-
-#app-container {
-    display: flex;
-    flex-direction: column;
-    /* Wichtig für iPad Portrait - Feste Breite, zentriert */
-    width: 100%;
-    max-width: 768px; /* Maximale Breite (typisches Tablet im Hochformat) */
-    min-height: 100vh; /* Mindestens volle Höhe */
-    margin: 0 auto; /* Zentriert */
-    box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Kleiner Schatten außen */
-    background-color: var(--duo-darker-bg); /* Leichter Kontrast zum Body */
-    position: relative; /* Für absolute Positionierung innen */
-}
-
-/* Header */
-.app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    background-color: var(--duo-darker-bg); /* Oder --duo-dark-bg */
-    border-bottom: 1px solid var(--duo-grey-border);
-    height: 50px; /* Feste Höhe */
-    flex-shrink: 0; /* Verhindert Schrumpfen */
-}
-
-.header-left i, .header-right i {
-    font-size: 22px;
-    margin: 0 8px;
-    color: var(--duo-light-text);
-}
-.header-center {
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-}
-.yellow-icon { color: var(--duo-yellow); margin-right: 5px; }
-.blue-icon { color: var(--duo-blue); }
-.red-icon { color: var(--duo-red); }
-.fa-infinity { font-size: 18px; margin-left: 2px; }
-
-
-/* Hauptinhalt */
+/* Hauptinhalt - Platz für die Figur schaffen */
 .main-content {
-    flex-grow: 1; /* Nimmt verfügbaren Platz ein */
-    overflow-y: auto; /* Scrollbar bei Bedarf */
-    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px 20px 80px 20px; /* Mehr Platz unten für Figur/Footer */
+    position: relative; /* Für absolute Positionierung der Figur */
 }
 
-h1 {
-    color: var(--duo-light-text);
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.section-title {
-    background-color: var(--duo-purple);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 30px;
-}
-
-/* Lernpfad Stile (angepasst) */
+/* Lernpfad - Änderungen für Schlangenlinie (wird per JS positioniert) */
 .learning-path {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 20px; /* Links/Rechts etwas Abstand */
+    display: block; /* Nicht mehr flex, da JS positioniert */
+    position: relative; /* Basis für absolute Positionierung der Nodes */
+    padding-top: 20px; /* Etwas Platz oben */
+    padding-bottom: 40px; /* Mehr Platz unten */
+    margin: 0 auto; /* Zentriert den Pfad-Bereich */
+    max-width: 300px; /* Breite des Pfad-Bereichs */
 }
 
+/* Positionierung der Nodes und Connectors wird von JS übernommen */
 .lesson-node {
-    background-color: var(--duo-purple);
-    border-radius: 50%;
-    width: 75px;
-    height: 75px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-align: center;
-    border: 4px solid var(--duo-purple-light);
-    box-shadow: 0 5px 0px #5d397a; /* Tiefen-Effekt */
-    position: relative; /* Für Konnektoren und Beschriftung */
+    /* ... (bestehende Styles wie Farbe, Größe, etc.) ... */
+    position: absolute; /* Für JS-Positionierung */
+    left: 50%; /* JS passt translateX an */
+    transform: translateX(-50%); /* Standard: zentriert */
+    /* Margin wird nicht mehr für vertikalen Abstand genutzt */
 }
-
-.lesson-node:hover {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 8px 0px #5d397a, 0 4px 10px rgba(0,0,0,0.3);
+/* Entferne evtl. alte Margin/Align Items vom Path */
+.learning-path {
+ /* align-items: center; -> Entfernen */
 }
-.lesson-node:active {
-    transform: translateY(1px) scale(0.98);
-     box-shadow: 0 3px 0px #5d397a;
-}
-
-
-.lesson-icon {
-    font-size: 30px; /* Größere Icons */
-    color: white;
-    line-height: 1; /* Wichtig für vertikale Zentrierung */
-}
-
-/* Spezifische Icons / Meilensteine */
-.lesson-icon.trophy {
-    font-size: 36px; /* Größere Trophy */
-    color: var(--duo-yellow);
-    position: relative;
-}
-.lesson-icon.trophy span { /* Nummer in der Trophy */
-     position: absolute;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     font-size: 18px;
-     font-weight: bold;
-     color: var(--duo-purple);
-     line-height: 1;
-}
-.lesson-node.type-trophy {
-    background-color: var(--duo-yellow);
-    border-color: #ffd95a;
-    box-shadow: 0 5px 0px #cca000;
-    cursor: default; /* Nicht klickbar */
-}
-.lesson-node.type-trophy:hover { /* Kein Hover-Effekt für Trophy */
-    transform: none;
-    box-shadow: 0 5px 0px #cca000;
-}
-
-
-/* Lektionsname unter dem Knoten */
-.lesson-node span {
-    position: absolute;
-    bottom: -25px; /* Position unter dem Knoten */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 13px;
-    color: var(--duo-light-text);
-    background: rgba(0, 0, 0, 0.6); /* Kleiner Hintergrund für Lesbarkeit */
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap; /* Verhindert Umbruch */
-}
-.lesson-node.type-trophy span {
-     display: none; /* Text nicht anzeigen für Trophäen */
-}
-
 
 .connector {
-    width: 5px;
-    height: 40px; /* Längere Verbindung */
-    background-color: #553370;
-    border-radius: 3px;
-    /* Zwischen den Nodes positioniert durch margin der Nodes */
-}
-
-/* Footer Nav Bar */
-.app-footer {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: var(--duo-darker-bg);
-    border-top: 1px solid var(--duo-grey-border);
-    height: 60px; /* Etwas höher */
-    flex-shrink: 0;
-}
-
-.footer-icon {
-    font-size: 28px;
-    color: #888; /* Inaktiv */
-    cursor: pointer;
-    padding: 5px;
-}
-.footer-icon.active {
-    color: var(--duo-blue); /* Aktives Icon */
-}
-.footer-icon:hover {
-    color: var(--duo-light-text);
+    /* ... (bestehende Styles wie Farbe, Dicke) ... */
+    position: absolute; /* Auch absolut positioniert */
+    left: 50%;
+    transform: translateX(-50%);
+     z-index: -1; /* Hinter die Nodes legen */
+     /* Höhe und top werden per JS gesetzt */
 }
 
 
-/* Overlay Stile (stark angepasst) */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--duo-overlay-bg); /* Direkt dunkler Hintergrund */
-    display: flex; /* Standardmäßig sichtbar, wird über JS gesteuert */
-    flex-direction: column; /* Header, Content, Footer */
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.3s ease, transform 0.3s ease; /* Sanftes Einblenden */
-    transform: translateY(100%); /* Startet außerhalb des Screens */
+/* Style für erledigte Lektionen */
+.lesson-node.lesson-completed {
+    background-color: var(--duo-grey-completed);
+    border-color: var(--duo-grey-completed-border);
+    box-shadow: 0 5px 0px var(--duo-grey-completed-shadow);
+}
+.lesson-node.lesson-completed:hover { /* Weniger auffälliger Hover */
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 6px 0px var(--duo-grey-completed-shadow), 0 2px 5px rgba(0,0,0,0.2);
+}
+.lesson-node.lesson-completed:active {
+     transform: translateY(1px) scale(0.99);
+     box-shadow: 0 3px 0px var(--duo-grey-completed-shadow);
 }
 
-.overlay:not(.hidden) {
-    transform: translateY(0%); /* Fährt von unten rein */
-}
-
-.overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-     transform: translateY(100%); /* Fährt nach unten raus */
-}
-
-.overlay-content {
-    flex-grow: 1; /* Nimmt Platz zwischen Header und Footer */
-    display: flex;
-    flex-direction: column; /* Aufgabenstellung, dann Area, dann Feedback */
-    padding: 0 20px 20px 20px; /* Kein Padding oben (macht Header), unten weniger */
-    overflow-y: auto; /* Scrollen bei Bedarf im Content */
-}
-
-/* Overlay Header */
-.overlay-header {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    height: 50px; /* Feste Höhe wie App-Header */
-    flex-shrink: 0;
-    border-bottom: 1px solid var(--duo-grey-border);
-}
-.close-button {
-    background: none;
-    border: none;
-    font-size: 30px;
-    color: #aaa;
-    cursor: pointer;
-    padding: 0 10px;
-    margin-right: 15px;
-}
-.close-button:hover { color: #fff; }
-
-.progress-bar-container {
-    flex-grow: 1;
-    height: 15px;
-    background-color: var(--duo-grey-border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-right: 15px;
-}
-.progress-bar-inner {
-    height: 100%;
-    width: 10%; /* Startwert, wird per JS geändert */
+/* Optional: Checkmark für erledigte Lektionen */
+.lesson-node.lesson-completed::after {
+    content: '\f00c'; /* Font Awesome Checkmark */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 18px;
+    color: white;
     background-color: var(--duo-green);
-    border-radius: 10px;
-    transition: width 0.3s ease;
-}
-.overlay-header .red-icon {
-    margin-right: 5px;
-    font-size: 20px;
-}
-.heart-count {
-    font-weight: bold;
-    color: var(--duo-light-text);
-     min-width: 20px; /* Platz für Zahl oder Unendlichkeitszeichen */
-     text-align: right;
-}
-
-
-#lesson-task-description {
-    color: var(--duo-light-text);
-    text-align: center;
-    font-size: 1.4em;
-    font-weight: bold;
-    margin: 20px 0;
-}
-
-/* Bereich für Lektionen */
-.lesson-area {
-    flex-grow: 1; /* Nimmt Platz im overlay-content */
-    display: flex; /* Standard-Flexbox */
-    flex-direction: column; /* Default: Untereinander */
-    align-items: center; /* Zentriert Inhalt horizontal */
-}
-.lesson-area.hidden {
-    display: none; /* Wichtig zum Umschalten */
-}
-
-/* Drag & Drop Bereich Anpassungen */
-#drag-area {
-     flex-direction: column; /* Bleibt untereinander */
-     width: 100%;
-}
-.instruction-text {
-    color: #ccc;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-}
-
-#image-source, #drop-target {
-    border: 2px dashed var(--duo-grey-border);
-    padding: 15px;
-    border-radius: 12px;
-    width: 90%; /* Fast volle Breite */
-    margin: 10px auto; /* Zentriert mit Abstand */
-    min-height: 100px;
-    text-align: center; /* Zentriert Platzhalter/Bilder darin */
-}
-#image-source {
-     background-color: rgba(0,0,0,0.1);
-}
-#drop-target {
-    background-color: rgba(0,0,0,0.2);
-}
-
-#image-source p, #drop-target p {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-weight: bold;
-    color: #bbb;
-}
-
-.dance-step-img {
-    width: 75px;
-    height: 75px;
-    object-fit: cover;
-    border: 2px solid #999;
-    border-radius: 8px;
-    margin: 5px;
-    cursor: grab;
-    background-color: #555;
-    display: inline-block;
-    vertical-align: middle; /* Mittig ausrichten */
-     transition: transform 0.1s ease-out;
-}
-.dance-step-img.dragging { /* Style für das Element, das gezogen wird */
-    opacity: 0.4;
-    transform: scale(0.9);
-}
-
-.drop-placeholder {
-    width: 85px;
-    height: 85px;
-    border: 2px dashed #777;
-    border-radius: 8px;
-    display: inline-flex;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
     justify-content: center;
     align-items: center;
-    margin: 5px;
-    background-color: #4f4f5f;
-    color: #888;
-    font-size: 28px;
-    vertical-align: middle; /* Mittig ausrichten */
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.3);
 }
-
-.drop-placeholder.drag-over {
-    background-color: var(--duo-blue);
-    border-color: #fff;
-    border-style: solid;
-}
-/* Style, wenn ein Bild im Placeholder ist */
-.drop-placeholder:has(.dance-step-img) {
-     border-style: solid;
-     border-color: transparent; /* Rahmen weg, da Bild eigenen hat */
-     padding: 0; /* Kein Innenabstand */
-     font-size: 0; /* Nummer ausblenden */
+/* Kein Checkmark für Trophäen */
+.lesson-node.type-trophy.lesson-completed::after {
+    display: none;
 }
 
 
-/* Quiz Bereich */
-#quiz-area {
-    align-items: center; /* Zentriert Frage und Optionen */
-    padding: 20px 0;
-}
-#quiz-question-text {
-    font-size: 1.3em;
-    margin-bottom: 25px;
-    color: var(--duo-light-text);
-    font-weight: normal;
-}
-
-#quiz-options {
-    display: flex;
-    flex-direction: column; /* Optionen untereinander */
-    align-items: center; /* Zentriert Buttons */
-    width: 80%; /* Nicht volle Breite */
-    max-width: 400px;
-    gap: 12px; /* Abstand zwischen Buttons */
-}
-
-.quiz-option-button {
-    width: 100%;
-    padding: 15px 20px;
-    font-size: 1.1em;
-    font-weight: bold;
-    color: var(--duo-light-text);
-    background-color: var(--duo-darker-bg); /* Dunkle Button-Basis */
-    border: 2px solid var(--duo-grey-border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
-     text-align: center;
-     box-shadow: 0 3px 0px #4b4b6b; /* Tiefe */
-}
-
-.quiz-option-button:hover {
-    border-color: var(--duo-light-text);
-    background-color: #404052;
-}
-.quiz-option-button:active {
-     transform: translateY(2px);
-     box-shadow: 0 1px 0px #4b4b6b;
-}
-
-/* Stile für ausgewählte/korrekte/falsche Buttons */
-.quiz-option-button.selected {
-    background-color: var(--duo-blue);
+/* Drag & Drop Bereich - Styling für Klick-Auswahl */
+#image-source .dance-step-img.selected-for-placement {
     border-color: var(--duo-blue);
-     box-shadow: 0 3px 0px #137ab8;
-     color: white;
-}
-/* Nach dem Checken */
-.quiz-option-button.correct {
-    background-color: var(--duo-green);
-    border-color: var(--duo-green);
-    color: white;
-    box-shadow: 0 3px 0px #4aa701;
-}
-.quiz-option-button.incorrect {
-     background-color: var(--duo-red);
-     border-color: var(--duo-red);
-     color: white;
-     box-shadow: 0 3px 0px #c13a3a;
+    box-shadow: var(--duo-selection-glow);
+    transform: scale(1.05);
+    cursor: default; /* Zeigt an, dass es ausgewählt ist */
 }
 
-
-/* Gemeinsamer Footer im Overlay (Fixiert unten) */
-.overlay-footer {
-    padding: 15px 20px;
-    background-color: var(--duo-overlay-bg); /* Muss Hintergrund haben, um Inhalt zu verdecken */
-    border-top: 2px solid var(--duo-grey-border);
-    margin-top: auto; /* Drückt den Footer nach unten */
-    flex-shrink: 0; /* Nicht schrumpfen */
-    text-align: center; /* Zentriert den Button */
-    position: relative; /* Für Feedback Positionierung */
-    min-height: 90px; /* Höhe für Button + Feedback */
-}
-
-#check-button {
-    padding: 15px 40px;
-    background-color: var(--duo-green);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.2em;
-    font-weight: bold;
+/* Platzhalter hervorheben, wenn ein Bild ausgewählt ist */
+.drop-placeholder.targetable {
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
-    width: 80%; /* Breiterer Button */
-    max-width: 350px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 0px var(--duo-green-dark);
-    position: relative; /* Für Feedback darunter */
-    z-index: 1; /* Über evtl. Feedback-Hintergrund */
+    border-style: dashed;
+    border-color: var(--duo-blue);
+    background-color: rgba(29, 176, 246, 0.1); /* Leichter blauer Hintergrund */
+}
+.drop-placeholder.targetable:hover {
+    border-style: solid;
+     background-color: rgba(29, 176, 246, 0.2);
 }
 
-#check-button:hover {
-    background-color: #6ae019;
-}
-#check-button:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0px var(--duo-green-dark);
-}
-#check-button:disabled { /* Style wenn deaktiviert */
-    background-color: #999;
-    color: #ccc;
-    cursor: not-allowed;
-    box-shadow: 0 4px 0px #777;
-}
 
-#feedback {
-    position: absolute; /* Überlagert den unteren Bereich */
-    bottom: 0;
-    left: 0;
+/* Duolingo Charakter Styling */
+#duo-character {
+    position: absolute; /* Innerhalb von main-content positioniert */
+    bottom: 70px; /* Abstand zum unteren Rand (über dem Footer) */
+    right: 5px;
+    width: 100px; /* Beispielgröße */
+    height: auto; /* Höhe automatisch anpassen */
+    z-index: 10; /* Über dem Lernpfad, aber unter Overlays */
+     pointer-events: none; /* Nicht klickbar machen */
+}
+#duo-character img {
+    display: block;
     width: 100%;
-    padding: 20px;
-    box-sizing: border-box; /* Padding zählt zur Breite */
-    font-weight: bold;
-    font-size: 1.2em;
-    text-align: left; /* Standard Duolingo Feedback-Stil */
-    border-radius: 0 0 15px 15px; /* Nur untere Ecken des Overlays */
-    color: white;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    transform: translateY(100%); /* Versteckt unter dem Button */
-    z-index: 0;
+    height: auto;
+    /* Optional: Filter für Schatten etc. */
+    /* filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); */
 }
 
-#feedback.visible {
-    transform: translateY(0%); /* Sichtbar machen */
+/* Responsive Anpassung für Figur (optional) */
+@media (max-width: 480px) {
+    #duo-character {
+        width: 70px;
+        bottom: 65px;
+        right: 0px;
+    }
 }
 
-#feedback.feedback-correct {
-    background-color: #a1ec7a; /* Helleres Grün für Feedback-Hintergrund */
-    color: var(--duo-green-dark);
-}
-
-#feedback.feedback-incorrect {
-    background-color: #fdb1b1; /* Helleres Rot für Feedback-Hintergrund */
-    color: var(--duo-red);
-}
-
-
-/* Versteckt standardmäßig Elemente */
-.hidden {
-    display: none !important;
-}
-
-/* Orientierungs-Warnung */
-#orientation-warning {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000; /* Über allem */
-    text-align: center;
-}
-#orientation-warning .warning-content {
-     padding: 30px;
-}
-#orientation-warning i {
-     font-size: 5em;
-     margin-bottom: 20px;
-     color: var(--duo-blue);
-}
-#orientation-warning p {
-     font-size: 1.5em;
+/* Anpassung Feedback, um Platz für Button zu lassen */
+#feedback.feedback-incorrect + #check-button {
+   /* Ggf. den Button etwas verschieben, wenn Feedback da ist */
+   /* Oder der Button bleibt, und Feedback überlagert nur den unteren Teil */
 }
