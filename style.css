@@ -1,5 +1,4 @@
 /* style.css */
-/* Globale Stile & CSS Variablen */
 :root {
     --duo-dark-bg: #2d2d3d;
     --duo-darker-bg: #1d1d2a;
@@ -9,7 +8,7 @@
     --duo-green: #58cc02;
     --duo-green-dark: #4aa701;
     --duo-red: #ff4b4b;
-    --duo-blue: #1cb0f6; /* Für Highlights/aktive Elemente */
+    --duo-blue: #1cb0f6;
     --duo-yellow: #ffc800;
     --duo-grey-border: #4b4b6b;
     --duo-overlay-bg: #3a3a4a;
@@ -19,7 +18,6 @@
     --duo-selection-glow: 0 0 8px 3px rgba(29, 176, 246, 0.7);
 }
 
-/* Einfacher Reset & Basis-Styling */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -35,10 +33,10 @@ body {
 }
 
 h1, h2, p {
-    margin-bottom: 0.5em; /* Standard Abstand für Text */
+    margin-bottom: 0.5em;
 }
 
-h1 { /* Überschrift im Pfad */
+h1 {
      color: var(--duo-light-text);
      text-align: center;
      margin-top: 1em;
@@ -50,7 +48,7 @@ h1 { /* Überschrift im Pfad */
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 768px; /* iPad Portrait-Breite */
+    max-width: 768px;
     min-height: 100vh;
     margin: 0 auto;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
@@ -58,7 +56,6 @@ h1 { /* Überschrift im Pfad */
     position: relative;
 }
 
-/* Header */
 .app-header {
     display: flex;
     justify-content: space-between;
@@ -76,7 +73,6 @@ h1 { /* Überschrift im Pfad */
 .red-icon { color: var(--duo-red); }
 .fa-infinity { font-size: 18px; margin-left: 2px; }
 
-/* Hauptinhalt & Charakter */
 .main-content {
     flex-grow: 1;
     overflow-y: auto;
@@ -105,19 +101,18 @@ h1 { /* Überschrift im Pfad */
     border-radius: 10px;
     text-align: center;
     font-weight: bold;
-    margin: 0 auto 30px auto; /* Zentriert, Abstand unten */
+    margin: 0 auto 30px auto;
     max-width: 90%;
 }
 
-/* Lernpfad Layout (Schlange) */
 .learning-path {
     display: block;
     position: relative;
     padding-top: 20px;
     padding-bottom: 40px;
     margin: 0 auto;
-    max-width: 300px; /* Breite der Schlangenbahn */
-    min-height: 300px; /* Mindesthöhe, damit etwas Platz ist */
+    max-width: 300px;
+    min-height: 300px;
 }
 .lesson-node {
     background-color: var(--duo-purple);
@@ -133,11 +128,10 @@ h1 { /* Überschrift im Pfad */
     text-align: center;
     border: 4px solid var(--duo-purple-light);
     box-shadow: 0 5px 0px #5d397a;
-    position: absolute; /* Positioniert durch JS */
-    /* Initial transform: translateX(-50%); -> wird von JS überschrieben */
+    position: absolute;
 }
 .lesson-node:hover {
-    transform: translateY(-3px) scale(1.03) translateX(var(--js-translate-x, -50%)); /* Behalte JS X-Position bei */
+    transform: translateY(-3px) scale(1.03) translateX(var(--js-translate-x, -50%));
     box-shadow: 0 8px 0px #5d397a, 0 4px 10px rgba(0,0,0,0.3);
 }
 .lesson-node:active {
@@ -149,14 +143,13 @@ h1 { /* Überschrift im Pfad */
 .lesson-icon.trophy span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 18px; font-weight: bold; color: var(--duo-purple); line-height: 1; }
 .lesson-node.type-trophy { background-color: var(--duo-yellow); border-color: #ffd95a; box-shadow: 0 5px 0px #cca000; cursor: default; }
 .lesson-node.type-trophy:hover { transform: translateX(var(--js-translate-x, -50%)); box-shadow: 0 5px 0px #cca000; }
-.lesson-node span { /* Lektionsname */
+.lesson-node span {
     position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); font-size: 13px;
     color: var(--duo-light-text); background: rgba(0, 0, 0, 0.7); padding: 3px 8px;
     border-radius: 4px; white-space: nowrap;
 }
 .lesson-node.type-trophy span { display: none; }
 
-/* Erledigte Lektionen */
 .lesson-node.lesson-completed {
     background-color: var(--duo-grey-completed);
     border-color: var(--duo-grey-completed-border);
@@ -170,9 +163,8 @@ h1 { /* Überschrift im Pfad */
     transform: translateY(1px) scale(0.99) translateX(var(--js-translate-x, -50%));
     box-shadow: 0 3px 0px var(--duo-grey-completed-shadow);
 }
-/* Optionales Checkmark Icon */
 .lesson-node.lesson-completed:not(.type-trophy)::after {
-    content: '\f00c'; /* Font Awesome Checkmark */
+    content: '\f00c';
     font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: -10px; right: -10px;
     font-size: 16px; color: white; background-color: var(--duo-green); border-radius: 50%;
     width: 22px; height: 22px; display: flex; justify-content: center; align-items: center;
@@ -185,12 +177,10 @@ h1 { /* Überschrift im Pfad */
     background-color: #553370;
     border-radius: 3px;
     position: absolute;
-    left: 50%; /* JS passt Transform an */
+    left: 50%;
     z-index: -1;
-    /* top, height, transform werden per JS gesetzt */
 }
 
-/* Footer */
 .app-footer {
     display: flex; justify-content: space-around; align-items: center;
     background-color: var(--duo-darker-bg); border-top: 1px solid var(--duo-grey-border);
@@ -201,13 +191,12 @@ h1 { /* Überschrift im Pfad */
 .footer-icon:hover { color: var(--duo-light-text); }
 
 
-/* Overlay Stile */
 .overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background-color: var(--duo-overlay-bg);
     display: flex; flex-direction: column; z-index: 1000;
     opacity: 1; transition: opacity 0.3s ease, transform 0.3s ease;
-    transform: translateY(100%); /* Startet unten */
+    transform: translateY(100%);
 }
 .overlay:not(.hidden) { transform: translateY(0%); }
 .overlay.hidden { opacity: 0; pointer-events: none; transform: translateY(100%); }
@@ -223,12 +212,10 @@ h1 { /* Überschrift im Pfad */
 .heart-count { font-weight: bold; color: var(--duo-light-text); min-width: 20px; text-align: right; }
 #lesson-task-description { color: var(--duo-light-text); text-align: center; font-size: 1.4em; font-weight: bold; margin: 20px 0; padding: 0 10px; }
 
-/* Lektionsbereiche */
 .lesson-area { flex-grow: 1; display: flex; flex-direction: column; align-items: center; }
 .lesson-area.hidden { display: none; }
 .instruction-text { color: #ccc; margin-bottom: 15px; font-size: 1.1em; text-align: center; }
 
-/* Drag & Drop / Click-to-Place */
 #drag-area { flex-direction: column; width: 100%; }
 #image-source, #drop-target {
     border: 2px dashed var(--duo-grey-border); padding: 15px; border-radius: 12px;
@@ -240,16 +227,14 @@ h1 { /* Überschrift im Pfad */
     width: 75px; height: 75px; object-fit: cover; border: 3px solid #999;
     border-radius: 8px; margin: 5px; cursor: grab; background-color: #555;
     display: inline-block; vertical-align: middle; transition: transform 0.1s ease-out, border-color 0.2s ease, box-shadow 0.2s ease;
-    user-select: none; /* Verhindert Textauswahl beim Klicken/Ziehen */
+    user-select: none;
 }
 .dance-step-img:active { cursor: grabbing; }
 .dance-step-img.dragging { opacity: 0.4; transform: scale(0.9); }
-/* Klick-Auswahl */
 #image-source .dance-step-img.selected-for-placement {
     border-color: var(--duo-blue); box-shadow: var(--duo-selection-glow);
     transform: scale(1.05); cursor: default;
 }
-/* Ziel-Platzhalter */
 .drop-placeholder {
     width: 85px; height: 85px; border: 2px dashed #777; border-radius: 8px;
     display: inline-flex; justify-content: center; align-items: center; margin: 5px;
@@ -257,17 +242,13 @@ h1 { /* Überschrift im Pfad */
     transition: background-color 0.2s ease, border-color 0.2s ease, border-style 0.2s ease;
     user-select: none;
 }
-/* Highlight für Drag Over */
 .drop-placeholder.drag-over { background-color: var(--duo-blue) !important; border-color: #fff !important; border-style: solid !important; }
-/* Highlight für Klick-Ziel */
 .drop-placeholder.targetable {
     cursor: pointer; border-style: dashed; border-color: var(--duo-blue); background-color: rgba(29, 176, 246, 0.1);
 }
 .drop-placeholder.targetable:hover { border-style: solid; background-color: rgba(29, 176, 246, 0.2); }
-/* Style wenn Bild im Placeholder ist */
 .drop-placeholder:has(.dance-step-img) { border-style: solid; border-color: transparent; padding: 0; font-size: 0; background-color: transparent; }
 
-/* Quiz Bereich */
 #quiz-area { align-items: center; padding: 10px 0; }
 #quiz-question-text { font-size: 1.3em; margin-bottom: 25px; color: var(--duo-light-text); font-weight: normal; padding: 0 10px; }
 #quiz-options { display: flex; flex-direction: column; align-items: center; width: 90%; max-width: 400px; gap: 12px; }
@@ -282,10 +263,9 @@ h1 { /* Überschrift im Pfad */
 .quiz-option-button.selected { background-color: var(--duo-blue); border-color: var(--duo-blue); box-shadow: 0 3px 0px #137ab8; color: white; }
 .quiz-option-button.correct { background-color: var(--duo-green); border-color: var(--duo-green); color: white; box-shadow: 0 3px 0px #4aa701; cursor: default; }
 .quiz-option-button.incorrect { background-color: var(--duo-red); border-color: var(--duo-red); color: white; box-shadow: 0 3px 0px #c13a3a; cursor: default; }
-.quiz-option-button:disabled { cursor: default; opacity: 0.8; } /* Style für deaktivierte Buttons nach Antwort */
+.quiz-option-button:disabled { cursor: default; opacity: 0.8; }
 
 
-/* Overlay Footer */
 .overlay-footer {
     padding: 15px 20px; background-color: var(--duo-overlay-bg); border-top: 2px solid var(--duo-grey-border);
     margin-top: auto; flex-shrink: 0; text-align: center; position: relative; min-height: 90px;
@@ -295,12 +275,11 @@ h1 { /* Überschrift im Pfad */
     font-size: 1.2em; font-weight: bold; cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s;
     width: 90%; max-width: 350px; text-transform: uppercase; box-shadow: 0 4px 0px var(--duo-green-dark);
-    position: relative; z-index: 1; -webkit-appearance: none; /* Für iOS Button-Style */
+    position: relative; z-index: 1; -webkit-appearance: none;
 }
 #check-button:hover { background-color: #6ae019; }
 #check-button:active { transform: translateY(2px); box-shadow: 0 2px 0px var(--duo-green-dark); }
 #check-button:disabled { background-color: #999; color: #ccc; cursor: not-allowed; box-shadow: 0 4px 0px #777; opacity: 0.7;}
-/* Feedback Bereich Styling */
 .feedback {
     position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 20px 15px 20px; box-sizing: border-box;
     font-weight: bold; font-size: 1.2em; text-align: left; color: white;
@@ -311,15 +290,15 @@ h1 { /* Überschrift im Pfad */
 .feedback.feedback-incorrect { background-color: #fdb1b1; color: var(--duo-red); }
 
 
-/* Hilfsklasse */
 .hidden { display: none !important; }
 
-/* Orientierungs-Warnung */
 #orientation-warning {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95);
-    color: white; display: flex; justify-content: center; align-items: center; z-index: 2000; text-align: center;
+    color: white; display: none; justify-content: center; align-items: center; z-index: 2000; text-align: center;
 }
-#orientation-warning.hidden { display: none; } /* Wichtig, da es initial angezeigt werden könnte */
+#orientation-warning:not(.hidden) {
+    display: flex;
+}
 #orientation-warning .warning-content { padding: 30px; }
 #orientation-warning i { font-size: 5em; margin-bottom: 20px; color: var(--duo-blue); }
 #orientation-warning p { font-size: 1.5em; }
