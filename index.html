@@ -2,49 +2,108 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tanz-Lernpfad</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Optional: Font Awesome für Icons (wie bei Duolingo oft verwendet) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Font Awesome für Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <h1>Mein Tanz-Lernpfad</h1>
-
-    <div class="learning-path">
-        <!-- Beispiel-Lektionen -->
-        <div class="lesson-node" data-lesson-id="lesson1">
-            <div class="lesson-icon">
-                <i class="fas fa-shoe-prints"></i> <!-- Beispiel Icon -->
-            </div>
-            <span>Lektion 1: Grundschritt</span>
+    <!-- Warnung für falsche Orientierung -->
+    <div id="orientation-warning" class="hidden">
+        <div class="warning-content">
+            <i class="fas fa-mobile-screen-button"></i>
+            <p>Bitte drehe dein Gerät ins Hochformat, um die App zu nutzen.</p>
         </div>
-        <div class="connector"></div>
-        <div class="lesson-node" data-lesson-id="lesson2">
-            <div class="lesson-icon">
-                <i class="fas fa-sync-alt"></i> <!-- Beispiel Icon -->
-            </div>
-            <span>Lektion 2: Drehung</span>
-        </div>
-        <div class="connector"></div>
-         <div class="lesson-node" data-lesson-id="lesson3">
-            <div class="lesson-icon">
-                 <i class="fas fa-star"></i> <!-- Beispiel Icon -->
-            </div>
-            <span>Lektion 3: Pose</span>
-        </div>
-        <!-- Füge hier weitere Lektionen und Konnektoren hinzu -->
     </div>
 
-    <!-- Das Overlay/Modal für die Lektion (zuerst versteckt) -->
+    <!-- Hauptcontainer für die App-Struktur -->
+    <div id="app-container">
+
+        <!-- Header (Duolingo-Stil, nicht funktional) -->
+        <header class="app-header">
+            <div class="header-left">
+                <i class="fas fa-flag"></i> <!-- Sprachflagge (Platzhalter) -->
+            </div>
+            <div class="header-center">
+                 <!-- Hier könnte eine Art XP-Anzeige oder Level sein -->
+                 <i class="fas fa-star yellow-icon"></i> 1196 <!-- Beispiel -->
+            </div>
+            <div class="header-right">
+                <i class="fas fa-gem blue-icon"></i> 14728 <!-- Beispiel Gems -->
+                <i class="fas fa-heart red-icon"></i> <i class="fas fa-infinity"></i> <!-- Beispiel Herzen -->
+            </div>
+        </header>
+
+        <!-- Hauptinhalt (Scrollbar, wenn nötig) -->
+        <main class="main-content">
+            <h1>Tanz-Lernpfad</h1>
+            <p class="section-title">SECTION 1, UNIT 1: Grundlegende Schritte</p>
+
+            <div class="learning-path">
+                <!-- Mehr Beispiel-Lektionen -->
+                <div class="lesson-node type-dragdrop" data-lesson-id="lesson1">
+                    <div class="lesson-icon"><i class="fas fa-shoe-prints"></i></div>
+                    <span>Grundschritt</span>
+                </div>
+                <div class="connector"></div>
+                 <div class="lesson-node type-quiz" data-lesson-id="lessonQuiz1"> <!-- Neuer Typ -->
+                    <div class="lesson-icon"><i class="fas fa-question"></i></div>
+                    <span>Theorie-Check</span>
+                </div>
+                <div class="connector"></div>
+                <div class="lesson-node type-dragdrop" data-lesson-id="lesson2">
+                    <div class="lesson-icon"><i class="fas fa-sync-alt"></i></div>
+                    <span>Drehung</span>
+                </div>
+                <div class="connector"></div>
+                 <div class="lesson-node type-trophy" data-lesson-id="unit1Trophy"> <!-- Nur ein Meilenstein -->
+                     <div class="lesson-icon trophy"><i class="fas fa-trophy"></i><span>1</span></div>
+                 </div>
+                <div class="connector"></div>
+                <div class="lesson-node type-dragdrop" data-lesson-id="lesson3">
+                    <div class="lesson-icon"><i class="fas fa-star"></i></div>
+                    <span>Pose</span>
+                </div>
+                <div class="connector"></div>
+                 <div class="lesson-node type-quiz" data-lesson-id="lessonQuiz2"> <!-- Neuer Typ -->
+                    <div class="lesson-icon"><i class="fas fa-clipboard-question"></i></div>
+                    <span>Rhythmus-Quiz</span>
+                </div>
+                 <!-- Füge hier bei Bedarf weitere hinzu -->
+            </div>
+        </main>
+
+        <!-- Footer Nav Bar (Duolingo-Stil, nicht funktional) -->
+        <footer class="app-footer">
+            <div class="footer-icon active"><i class="fas fa-home"></i></div>
+            <div class="footer-icon"><i class="fas fa-dumbbell"></i></div>
+            <div class="footer-icon"><i class="fas fa-user"></i></div>
+            <div class="footer-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="footer-icon"><i class="fas fa-store"></i></div>
+        </footer>
+
+    </div> <!-- Ende App-Container -->
+
+
+    <!-- Das Overlay/Modal für die Lektion -->
     <div id="lesson-overlay" class="overlay hidden">
         <div class="overlay-content">
-            <button class="close-button">&times;</button>
-            <h2 id="lesson-title">Lektion: Ordne die Schritte!</h2>
-            <p>Ziehe die Bilder in die richtige Reihenfolge.</p>
+            <!-- Overlay Header mit Fortschrittsbalken -->
+            <div class="overlay-header">
+                 <button class="close-button">×</button>
+                 <div class="progress-bar-container">
+                     <div class="progress-bar-inner"></div>
+                 </div>
+                 <i class="fas fa-heart red-icon"></i> <span class="heart-count"></span> <!-- Herzanzahl oder unendlich -->
+            </div>
 
-            <div class="drag-area">
+            <h2 id="lesson-task-description">Lade Lektion...</h2> <!-- Hier kommt die Aufgabenstellung hin -->
+
+            <!-- Bereich für Drag & Drop Aufgaben (Standardmäßig versteckt) -->
+            <div id="drag-area" class="lesson-area hidden">
+                 <p class="instruction-text">Ziehe die Schritte in die richtige Reihenfolge.</p>
                 <div id="image-source">
                     <p>Verfügbare Schritte:</p>
                     <!-- Bilder werden hier per JS eingefügt -->
@@ -52,17 +111,31 @@
                 <div id="drop-target">
                     <p>Deine Reihenfolge:</p>
                     <!-- Drop-Zonen (Platzhalter) -->
-                     <div class="drop-placeholder" data-order="1">1</div>
-                     <div class="drop-placeholder" data-order="2">2</div>
-                     <div class="drop-placeholder" data-order="3">3</div>
-                     <!-- Füge bei Bedarf mehr hinzu -->
+                    <!-- Werden jetzt dynamisch per JS hinzugefügt -->
                 </div>
             </div>
 
-            <button id="check-button">Überprüfen</button>
-            <div id="feedback"></div>
+             <!-- Bereich für Quiz Aufgaben (Standardmäßig versteckt) -->
+            <div id="quiz-area" class="lesson-area hidden">
+                <p id="quiz-question-text">Fragetext hier...</p>
+                <div id="quiz-options">
+                    <!-- Quiz-Optionen (Buttons) werden hier per JS eingefügt -->
+                </div>
+            </div>
+
+
+            <!-- Gemeinsamer Footer im Overlay -->
+            <div class="overlay-footer">
+                <button id="check-button">Überprüfen</button>
+                <div id="feedback"></div>
+            </div>
         </div>
     </div>
+
+    <!-- Audio Elemente für Sounds -->
+    <audio id="correct-sound" src="sounds/correct.mp3" preload="auto"></audio> <!-- Pfad anpassen! -->
+    <audio id="incorrect-sound" src="sounds/incorrect.mp3" preload="auto"></audio> <!-- Pfad anpassen! -->
+
 
     <script src="script.js"></script>
 </body>
