@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lessonQuiz1: {
             type: 'quiz', title: "Theorie-Check", task: "Beantworte die Frage:",
             questions: [
-                { question: "Welcher Takt ist typisch für Walzer?", options: [ { text: "4/4 Takt", correct: false }, { text: "3/4 Takt", correct: true }, { text: "2/4 Takt", correct: false } ] },
-                { question: "Wie nennt man die Standard-Tanzhaltung?", options: [ { text: "Offene Haltung", correct: false }, { text: "Promenadenposition", correct: false }, { text: "Geschlossene Haltung", correct: true } ] }
+                { question: "Von wo haben die Niederländer den Tanz geklaut?", options: [ { text: "Aus Schottland", correct: false }, { text: "Timbuktu", correct: false }, { text: "Deutschland", correct: true } ] },
+                { question: "Warum wurde dieser Tanz getanzt?", options: [ { text: "Bei Geburtstagen", correct: false }, { text: "Zum Abschied der Seemänner", correct: false }, { text: "Zum Willkommen heißen der Seemänner", correct: true } ] }
             ]
         },
         lesson2: {
@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lessonQuiz2: {
              type: 'quiz', title: "Fakten-Quiz", task: "Teste dein Wissen!",
              questions: [
-                 { question: "Zähle den Cha-Cha-Cha Grundrhythmus:", options: [ { text: "Lang, Lang, Schnell-Schnell", correct: false }, { text: "Schnell, Schnell, Lang, Lang", correct: false }, { text: "2, 3, Cha-Cha-Cha (4 und 1)", correct: true }, { text: "Lang, Schnell, Schnell, Lang", correct: false } ] },
-                  { question: "Welcher Tanz hat einen 'Slow, Quick, Quick' Rhythmus?", options: [ { text: "Samba", correct: false }, { text: "Foxtrott", correct: true }, { text: "Jive", correct: false } ] }
+                 { question: "Wie viele Personen stehen traditionell in einer Reihe?", options: [ { text: "1 Person", correct: false }, { text: "2 Personen", correct: false }, { text: "3 Personen", correct: true }, { text: "4 Personen", correct: false } ] },
+                  { question: "Welche Kleidung wird traditionell beim Tanz getragen?, options: [ { text: "Kurze Hose und Hut", correct: false }, { text: "Lange Schütze und Trachtenhut", correct: true }, { text: "Lackschuhe und Strohhut", correct: false } ] }
              ]
          }
         // Füge hier ggf. Daten für 'unit1Trophy' hinzu, falls nötig
