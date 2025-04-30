@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let draggedItem = null;
     let selectedImageForPlacement = null;
     let completedLessons = [];
+    // Fix: Declare sourceZone and currentDraggables/currentDropzones
+    const sourceZone = imageSource;
+    let currentDraggables = [];
+    let currentDropzones = [];
 
     // --- Konstanten für Layout ---
     const LESSON_NODE_HEIGHT = 75 + 4 * 2; // Knotenhöhe + 2*Border
