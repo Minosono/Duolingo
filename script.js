@@ -27,12 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Lektionsdaten (Beispiele - Anpassen!) ---
     const lessonData = {
         lesson1: {
-            type: 'dragdrop', title: "Grundschritt lernen", task: "Ordne die Phasen des Grundschritts.",
+            type: 'dragdrop', title: "Achterrümschritt Grundform", task: "Ordne die Phasen des Grundschritts.",
             images: [ // WICHTIG: Bildpfade hier korrekt angeben!
                 { id: 'step1a', src: 'images/step1a.png', correctOrder: 1 },
                 { id: 'step1b', src: 'images/step1b.png', correctOrder: 2 },
                 { id: 'step1c', src: 'images/step1c.png', correctOrder: 3 },
-            ], numberOfSteps: 3
+                { id: 'step1d', src: 'images/step1d.png', correctOrder: 4 },
+            ], numberOfSteps: 4
         },
         lessonQuiz1: {
             type: 'quiz', title: "Theorie-Check", task: "Beantworte die Frage:",
@@ -42,20 +43,20 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         lesson2: {
-            type: 'dragdrop', title: "Drehung üben", task: "Sortiere die Schritte der Drehung.",
+            type: 'dragdrop', title: "Achterrümschritt mit Hüpfschwung", task: "Sortiere die Schritte des Schrittes.",
             images: [ // Beispiel-Pfade!
                  { id: 'step2a', src: 'images/step2a.png', correctOrder: 1 }, { id: 'step2b', src: 'images/step2b.png', correctOrder: 2 },
                  { id: 'step2c', src: 'images/step2c.png', correctOrder: 3 }, { id: 'step2d', src: 'images/step2d.png', correctOrder: 4 },
             ], numberOfSteps: 4
         },
         lesson3: {
-            type: 'dragdrop', title: "Pose einnehmen", task: "Welche Schritte führen zur Pose?",
+            type: 'dragdrop', title: "Ritornell", task: "Welche Schritte führen zum Ritornell?",
             images: [ // Beispiel-Pfade!
-                { id: 'step3a', src: 'images/step3a.png', correctOrder: 1 }, { id: 'step3b', src: 'images/step3b.png', correctOrder: 2 },
-            ], numberOfSteps: 2
+                { id: 'step3a', src: 'images/step3a.png', correctOrder: 1 }, { id: 'step3b', src: 'images/step3b.png', correctOrder: 2 },{ id: 'step3c', src: 'images/step3c.png', correctOrder: 3 },
+            ], numberOfSteps: 3
         },
         lessonQuiz2: {
-             type: 'quiz', title: "Rhythmus-Quiz", task: "Teste dein Rhythmusgefühl!",
+             type: 'quiz', title: "Fakten-Quiz", task: "Teste dein Wissen!",
              questions: [
                  { question: "Zähle den Cha-Cha-Cha Grundrhythmus:", options: [ { text: "Lang, Lang, Schnell-Schnell", correct: false }, { text: "Schnell, Schnell, Lang, Lang", correct: false }, { text: "2, 3, Cha-Cha-Cha (4 und 1)", correct: true }, { text: "Lang, Schnell, Schnell, Lang", correct: false } ] },
                   { question: "Welcher Tanz hat einen 'Slow, Quick, Quick' Rhythmus?", options: [ { text: "Samba", correct: false }, { text: "Foxtrott", correct: true }, { text: "Jive", correct: false } ] }
