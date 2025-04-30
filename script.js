@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
              type: 'quiz', title: "Fakten-Quiz", task: "Teste dein Wissen!",
              questions: [
                  { question: "Wie viele Personen stehen traditionell in einer Reihe?", options: [ { text: "1 Person", correct: false }, { text: "2 Personen", correct: false }, { text: "3 Personen", correct: true }, { text: "4 Personen", correct: false } ] },
-                  { question: "Welche Kleidung wird traditionell beim Tanz getragen?, options: [ { text: "Kurze Hose und Hut", correct: false }, { text: "Lange Schütze und Trachtenhut", correct: true }, { text: "Lackschuhe und Strohhut", correct: false } ] }
+                  { question: "Welche Kleidung wird traditionell beim Tanz getragen?", options: [ { text: "Kurze Hose und Hut", correct: false }, { text: "Lange Schütze und Trachtenhut", correct: true }, { text: "Lackschuhe und Strohhut", correct: false } ] }
              ]
          }
         // Füge hier ggf. Daten für 'unit1Trophy' hinzu, falls nötig
