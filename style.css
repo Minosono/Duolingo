@@ -108,32 +108,17 @@ h1 {
 .learning-path {
     display: block;
     position: relative;
-    padding-top: 20px;
-    padding-bottom: 40px;
+    padding-top: 60px;
+    padding-bottom: 80px;
     margin: 0 auto;
-    max-width: 300px;
-    min-height: 300px;
     width: 100%;
-    /* Responsive: use more width on small screens */
-}
-@media (max-width: 700px) {
-    .learning-path {
-        max-width: 98vw;
-        min-width: 0;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-@media (max-width: 500px) {
-    .learning-path {
-        max-width: 100vw;
-        padding-left: 0;
-        padding-right: 0;
-    }
+    min-height: 500px;
+    max-width: 100vw;
+    height: 80vh;
+    /* Ermöglicht Pfad über die ganze Seite */
 }
 .lesson-node {
+    /* Positionierung wird per JS gesetzt */
     background-color: var(--duo-purple);
     border-radius: 50%;
     width: 75px;
@@ -148,6 +133,36 @@ h1 {
     border: 4px solid var(--duo-purple-light);
     box-shadow: 0 5px 0px #5d397a;
     position: absolute;
+    left: 50%;
+    /* Die horizontale Position wird per transform gesetzt */
+}
+.connector {
+    width: 5px;
+    background-color: #553370;
+    border-radius: 3px;
+    position: absolute;
+    left: 50%;
+    z-index: -1;
+    /* Die Höhe und Position werden per JS gesetzt */
+}
+@media (max-width: 700px) {
+    .learning-path {
+        max-width: 100vw;
+        min-width: 0;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        height: 80vh;
+    }
+}
+@media (max-width: 500px) {
+    .learning-path {
+        max-width: 100vw;
+        padding-left: 0;
+        padding-right: 0;
+        height: 80vh;
+    }
 }
 .lesson-node:hover {
     transform: translateY(-3px) scale(1.03) translateX(var(--js-translate-x, -50%));
@@ -190,15 +205,6 @@ h1 {
     box-shadow: 0 2px 3px rgba(0,0,0,0.3); border: 1px solid white;
 }
 
-
-.connector {
-    width: 5px;
-    background-color: #553370;
-    border-radius: 3px;
-    position: absolute;
-    left: 50%;
-    z-index: -1;
-}
 
 .app-footer {
     display: flex; justify-content: space-around; align-items: center;
@@ -312,12 +318,12 @@ h1 {
 .hidden { display: none !important; }
 
 #orientation-warning {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95);
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.95);
     color: white; display: none; justify-content: center; align-items: center; z-index: 2000; text-align: center;
 }
 #orientation-warning:not(.hidden) {
-    display: flex;
+    display: flex !important;
 }
-#orientation-warning .warning-content { padding: 30px; }
-#orientation-warning i { font-size: 5em; margin-bottom: 20px; color: var(--duo-blue); }
-#orientation-warning p { font-size: 1.5em; }
+#app-container.hidden {
+    display: none !important;
+}
