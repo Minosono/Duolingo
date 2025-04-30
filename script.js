@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lessonQuiz1: {
             type: 'quiz', title: "Theorie-Check", task: "Beantworte die Frage:",
             questions: [
-                { question: "Von wo haben die Niederländer den Tanz geklaut?", options: [ { text: "Aus Schottland", correct: false }, { text: "Timbuktu", correct: false }, { text: "Deutschland", correct: true } ] },
+                { question: "Von wo haben die Niederländer den Tanz geklaut?", options: [ { text: "Schottland", correct: false }, { text: "Timbuktu", correct: false }, { text: "Deutschland", correct: true } ] },
                 { question: "Warum wurde dieser Tanz getanzt?", options: [ { text: "Bei Geburtstagen", correct: false }, { text: "Zum Abschied der Seemänner", correct: false }, { text: "Zum Willkommen heißen der Seemänner", correct: true } ] }
             ]
         },
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
              type: 'quiz', title: "Fakten-Quiz", task: "Teste dein Wissen!",
              questions: [
                  { question: "Wie viele Personen stehen traditionell in einer Reihe?", options: [ { text: "1 Person", correct: false }, { text: "2 Personen", correct: false }, { text: "3 Personen", correct: true }, { text: "4 Personen", correct: false } ] },
-                  { question: "Welche Kleidung wird traditionell beim Tanz getragen?", options: [ { text: "Kurze Hose und Hut", correct: false }, { text: "Lange Schütze und Trachtenhut", correct: true }, { text: "Lackschuhe und Strohhut", correct: false } ] }
+                  { question: "Welche Kleidung wird traditionell beim Tanz getragen?", options: [ { text: "Kurze Hose und Hut", correct: false }, { text: "Lange Schürtze und Trachtenhut", correct: true }, { text: "Lackschuhe und Strohhut", correct: false } ] }
              ]
          }
         // Füge hier ggf. Daten für 'unit1Trophy' hinzu, falls nötig
