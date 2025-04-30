@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalHeight = 0;
         let connectorIndex = 0;
 
-        if (!lessonNodes.length) return; // Nichts tun, wenn keine Nodes da sind
+        if (!lessonNodes.length) return;
 
         // Responsive: adjust amplitude and width
         let containerWidth = learningPathContainer.offsetWidth;
@@ -150,35 +150,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         lessonNodes.forEach((node, index) => {
             const topPosition = index * VERTICAL_SPACING;
+            node.style.position = 'absolute';
             node.style.top = `${topPosition}px`;
-
-            const waveFactor = Math.sin((index / HORIZONTAL_WAVE_LENGTH) * Math.PI * 2 + Math.PI / 2); // Start in Mitte oben
+            node.style.left = '50%';
+            const waveFactor = Math.sin((index / HORIZONTAL_WAVE_LENGTH) * Math.PI * 2 + Math.PI / 2);
             const horizontalOffset = waveFactor * amplitude;
-            const translateXValue = `calc(-50% + ${horizontalOffset}px)`;
-            node.style.transform = `translateX(${translateXValue})`;
-            node.style.setProperty('--js-translate-x', translateXValue); // Für :hover
-
+            node.style.transform = `translateX(${horizontalOffset}px)`;
+            node.style.setProperty('--js-translate-x', `${horizontalOffset}px`);
             totalHeight = topPosition + LESSON_NODE_HEIGHT;
 
             if (connectors[connectorIndex] && index < lessonNodes.length - 1) {
                 const connector = connectors[connectorIndex];
-                const connectorTop = topPosition + LESSON_NODE_HEIGHT - 2; // Knapp unter Node ansetzen
+                const connectorTop = topPosition + LESSON_NODE_HEIGHT - 2;
+                connector.style.position = 'absolute';
                 connector.style.top = `${connectorTop}px`;
-                connector.style.height = `${CONNECTOR_BASE_HEIGHT + 7}px`; // Verbinder etwas länger
-
-                const nextNode = lessonNodes[index + 1];
+                connector.style.left = '50%';
+                connector.style.height = `${CONNECTOR_BASE_HEIGHT + 7}px`;
                 const nextWaveFactor = Math.sin(((index + 1) / HORIZONTAL_WAVE_LENGTH) * Math.PI * 2 + Math.PI / 2);
                 const nextHorizontalOffset = nextWaveFactor * amplitude;
                 const avgHorizontalOffset = (horizontalOffset + nextHorizontalOffset) / 2;
-                 connector.style.transform = `translateX(calc(-50% + ${avgHorizontalOffset}px))`;
-
+                connector.style.transform = `translateX(${avgHorizontalOffset}px)`;
                 connectorIndex++;
             } else if (connectors[connectorIndex]) {
-                 // Letzten Connector ausblenden oder entfernen
-                 connectors[connectorIndex].style.display = 'none';
+                connectors[connectorIndex].style.display = 'none';
             }
         });
-        learningPathContainer.style.height = `${totalHeight + 50}px`; // Höhe für Scrollbarkeit
+        learningPathContainer.style.height = `${totalHeight + 50}px`;
     }
 
     function checkOrientation() {
