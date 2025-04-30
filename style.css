@@ -48,12 +48,13 @@ h1 {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 768px;
+    max-width: 768px; /* Max width for larger screens */
     min-height: 100vh;
     margin: 0 auto;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     background-color: var(--duo-darker-bg);
     position: relative;
+    overflow-x: hidden; /* Prevent horizontal scrollbars if path exceeds slightly */
 }
 
 .app-header {
@@ -106,19 +107,18 @@ h1 {
 }
 
 .learning-path {
-    display: block;
+    display: block; /* Needs to be block for JS height calculation */
     position: relative;
-    padding-top: 60px;
-    padding-bottom: 80px;
+    padding-top: 60px; /* Space above first node */
+    padding-bottom: 80px; /* Space below last node */
     margin: 0 auto;
     width: 100%;
-    min-height: 500px;
-    max-width: 100vw;
-    height: 80vh;
-    /* Ermöglicht Pfad über die ganze Seite */
+    min-height: 500px; /* Ensure it has some height initially */
+    /* height: 80vh; -- Removed, JS will set height */
+    max-width: 100%; /* Ensure it doesn't overflow container */
 }
+
 .lesson-node {
-    /* Positionierung wird per JS gesetzt */
     background-color: var(--duo-purple);
     border-radius: 50%;
     width: 75px;
@@ -132,77 +132,104 @@ h1 {
     text-align: center;
     border: 4px solid var(--duo-purple-light);
     box-shadow: 0 5px 0px #5d397a;
-    position: absolute;
-    left: 50%;
-    /* Die horizontale Position wird per transform gesetzt */
+    position: absolute; /* Positioned by JS */
+    left: 50%;         /* Base horizontal position at center */
+    /* transform: translateX(-50%); -- This will be added by JS */
+    /* top: ... ; -- Set by JS */
 }
+
 .connector {
     width: 5px;
     background-color: #553370;
     border-radius: 3px;
-    position: absolute;
-    left: 50%;
-    z-index: -1;
-    /* Die Höhe und Position werden per JS gesetzt */
+    position: absolute; /* Positioned by JS */
+    left: 50%;         /* Base horizontal position at center */
+    z-index: -1;       /* Behind nodes */
+    /* transform: translateX(-50%); -- This will be added by JS */
+    /* height: ... ; -- Set by JS */
+    /* top: ... ; -- Set by JS */
 }
+
+/* Responsive adjustments for path - Keep container centered */
 @media (max-width: 700px) {
     .learning-path {
-        max-width: 100vw;
-        min-width: 0;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        height: 80vh;
+        /* No specific changes needed if #app-container handles max-width */
     }
 }
 @media (max-width: 500px) {
     .learning-path {
-        max-width: 100vw;
-        padding-left: 0;
-        padding-right: 0;
-        height: 80vh;
+       /* No specific changes needed if #app-container handles max-width */
     }
 }
-.lesson-node:hover {
-    transform: translateY(-3px) scale(1.03) translateX(var(--js-translate-x, -50%));
+
+.lesson-node:hover:not(.type-trophy) {
+    /* Keep the base transform from JS, just add scale and lift */
+    transform: scale(1.03) translateY(-3px) var(--js-transform); /* Use variable for base */
     box-shadow: 0 8px 0px #5d397a, 0 4px 10px rgba(0,0,0,0.3);
 }
-.lesson-node:active {
-    transform: translateY(1px) scale(0.98) translateX(var(--js-translate-x, -50%));
+.lesson-node:active:not(.type-trophy) {
+    /* Keep the base transform from JS, just add scale and press */
+    transform: scale(0.98) translateY(1px) var(--js-transform); /* Use variable for base */
     box-shadow: 0 3px 0px #5d397a;
 }
+
 .lesson-icon { font-size: 30px; color: white; line-height: 1; }
 .lesson-icon.trophy { font-size: 36px; color: var(--duo-yellow); position: relative; }
 .lesson-icon.trophy span { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 18px; font-weight: bold; color: var(--duo-purple); line-height: 1; }
-.lesson-node.type-trophy { background-color: var(--duo-yellow); border-color: #ffd95a; box-shadow: 0 5px 0px #cca000; cursor: default; }
-.lesson-node.type-trophy:hover { transform: translateX(var(--js-translate-x, -50%)); box-shadow: 0 5px 0px #cca000; }
-.lesson-node span {
-    position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); font-size: 13px;
-    color: var(--duo-light-text); background: rgba(0, 0, 0, 0.7); padding: 3px 8px;
-    border-radius: 4px; white-space: nowrap;
+
+.lesson-node.type-trophy {
+    background-color: var(--duo-yellow);
+    border-color: #ffd95a;
+    box-shadow: 0 5px 0px #cca000;
+    cursor: default;
 }
-.lesson-node.type-trophy span { display: none; }
+/* Trophy doesn't need hover/active effects */
+.lesson-node.type-trophy:hover {
+     transform: var(--js-transform); /* Keep base transform */
+     box-shadow: 0 5px 0px #cca000;
+}
+
+.lesson-node span {
+    position: absolute;
+    bottom: -28px; /* Position label below node */
+    left: 50%;
+    transform: translateX(-50%); /* Center the label text */
+    font-size: 13px;
+    color: var(--duo-light-text);
+    background: rgba(0, 0, 0, 0.7);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+.lesson-node.type-trophy span { display: none; } /* Hide default label for trophy */
 
 .lesson-node.lesson-completed {
     background-color: var(--duo-grey-completed);
     border-color: var(--duo-grey-completed-border);
     box-shadow: 0 5px 0px var(--duo-grey-completed-shadow);
 }
-.lesson-node.lesson-completed:hover {
-    transform: translateY(-2px) scale(1.01) translateX(var(--js-translate-x, -50%));
+.lesson-node.lesson-completed:hover:not(.type-trophy) {
+    transform: scale(1.01) translateY(-2px) var(--js-transform); /* Use variable for base */
     box-shadow: 0 6px 0px var(--duo-grey-completed-shadow), 0 2px 5px rgba(0,0,0,0.2);
 }
-.lesson-node.lesson-completed:active {
-    transform: translateY(1px) scale(0.99) translateX(var(--js-translate-x, -50%));
+.lesson-node.lesson-completed:active:not(.type-trophy) {
+    transform: scale(0.99) translateY(1px) var(--js-transform); /* Use variable for base */
     box-shadow: 0 3px 0px var(--duo-grey-completed-shadow);
 }
 .lesson-node.lesson-completed:not(.type-trophy)::after {
-    content: '\f00c';
-    font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: -10px; right: -10px;
-    font-size: 16px; color: white; background-color: var(--duo-green); border-radius: 50%;
-    width: 22px; height: 22px; display: flex; justify-content: center; align-items: center;
-    box-shadow: 0 2px 3px rgba(0,0,0,0.3); border: 1px solid white;
+    content: '\f00c'; /* FontAwesome checkmark */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: -10px; right: -10px;
+    font-size: 16px;
+    color: white;
+    background-color: var(--duo-green);
+    border-radius: 50%;
+    width: 22px; height: 22px;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+    border: 1px solid white;
 }
 
 
