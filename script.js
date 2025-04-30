@@ -141,12 +141,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!lessonNodes.length) return; // Nichts tun, wenn keine Nodes da sind
 
+        // Responsive: adjust amplitude and width
+        let containerWidth = learningPathContainer.offsetWidth;
+        let amplitude = HORIZONTAL_WAVE_AMPLITUDE;
+        if (window.innerWidth < 500) amplitude = 20;
+        else if (window.innerWidth < 700) amplitude = 35;
+        else amplitude = HORIZONTAL_WAVE_AMPLITUDE;
+
         lessonNodes.forEach((node, index) => {
             const topPosition = index * VERTICAL_SPACING;
             node.style.top = `${topPosition}px`;
 
             const waveFactor = Math.sin((index / HORIZONTAL_WAVE_LENGTH) * Math.PI * 2 + Math.PI / 2); // Start in Mitte oben
-            const horizontalOffset = waveFactor * HORIZONTAL_WAVE_AMPLITUDE;
+            const horizontalOffset = waveFactor * amplitude;
             const translateXValue = `calc(-50% + ${horizontalOffset}px)`;
             node.style.transform = `translateX(${translateXValue})`;
             node.style.setProperty('--js-translate-x', translateXValue); // Für :hover
@@ -161,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const nextNode = lessonNodes[index + 1];
                 const nextWaveFactor = Math.sin(((index + 1) / HORIZONTAL_WAVE_LENGTH) * Math.PI * 2 + Math.PI / 2);
-                const nextHorizontalOffset = nextWaveFactor * HORIZONTAL_WAVE_AMPLITUDE;
+                const nextHorizontalOffset = nextWaveFactor * amplitude;
                 const avgHorizontalOffset = (horizontalOffset + nextHorizontalOffset) / 2;
                  connector.style.transform = `translateX(calc(-50% + ${avgHorizontalOffset}px))`;
 
@@ -330,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
          checkButton.disabled = true;
      }
 
-    // --- Event Handler (Klick, Check, Drag&Drop, Quiz Auswahl) ---
+    // --- Event Handler (Klick, Check, Drag&Drop, Quiz Auswahl) --- 
 
     function handleSourceImageClick(event) {
         const clickedImage = event.target;
@@ -373,175 +380,19 @@ document.addEventListener('DOMContentLoaded', () => {
              else imageSource.appendChild(imageInside); // Fallback
             clickedPlaceholder.innerHTML = clickedPlaceholder.dataset.order;
             checkButton.disabled = true; // Immer deaktivieren beim Zurücklegen
-        }
-    }
-
-     function handleQuizOptionSelect(event) {
-         const selectedButton = event.target;
-         if (selectedButton.classList.contains('quiz-option-button') && !selectedButton.disabled) {
-             playSound(clickSound);
-             if (selectedQuizOption) { selectedQuizOption.classList.remove('selected'); }
-             selectedButton.classList.add('selected');
-             selectedQuizOption = selectedButton;
-             checkButton.disabled = false;
-         }
-     }
-
-    function handleCheck() {
-         if (checkButton.disabled) return; // Zusätzliche Sicherheit
-
-         if (currentLessonType === 'dragdrop') { checkDragDrop(); }
-         else if (currentLessonType === 'quiz') { checkQuizAnswer(); }
-         // Button wird in der jeweiligen Check-Funktion oder bei Fehler-Reset wieder (de)aktiviert
-     }
-
-    // --- Überprüfungslogik ---
-     function checkDragDrop() {
-        let isCorrect = true;
-        const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
-        const sourceImages = imageSource.querySelectorAll('.dance-step-img');
-
-        if (placeholders.length === 0 || sourceImages.length > 0) { // Keine Platzhalter oder Bilder übrig
-            isCorrect = false;
-        } else {
-            placeholders.forEach(placeholder => {
-                const img = placeholder.querySelector('.dance-step-img');
-                const placeholderOrder = parseInt(placeholder.dataset.order, 10);
-                if (!img || parseInt(img.dataset.correctOrder, 10) !== placeholderOrder) {
-                    isCorrect = false;
-                }
-            });
-        }
-
-        showFeedback(isCorrect);
-
-        if (isCorrect) {
-             // Check-Button kurz deaktivieren, während Feedback läuft
-             checkButton.disabled = true;
-            currentProgress++;
-            updateProgressBar();
-            saveCompletedLesson(currentLessonId);
-            setTimeout(closeOverlay, 1500); // Overlay nach Erfolg schließen
-        } else {
-            // Check-Button deaktivieren, bis Reset erfolgt ist
-             checkButton.disabled = true;
-            setTimeout(resetDragDropArea, 1300); // Reset nach falschem Feedback
-        }
-    }
-
-     function checkQuizAnswer() {
-         if (!selectedQuizOption) return;
-
-         const isCorrect = selectedQuizOption.dataset.correct === 'true';
-         const allOptionButtons = quizOptionsContainer.querySelectorAll('.quiz-option-button');
-
-         allOptionButtons.forEach(button => {
-             button.disabled = true; // Buttons nach Antwort deaktivieren
-             button.classList.remove('selected');
-             if (button.dataset.correct === 'true') {
-                 button.classList.add('correct');
-             } else if (button === selectedQuizOption && !isCorrect) {
-                 button.classList.add('incorrect');
-             }
-         });
-
-         showFeedback(isCorrect);
-         checkButton.disabled = true; // Check Button nach Prüfung deaktivieren
-
-         if (isCorrect) {
-             currentProgress++;
-             updateProgressBar();
-             currentQuizQuestionIndex++;
-             const data = lessonData[currentLessonId];
-             if (data && currentQuizQuestionIndex < data.questions.length) {
-                 setTimeout(() => {
-                     feedbackDiv.classList.remove('visible');
-                     displayQuizQuestion(data.questions[currentQuizQuestionIndex]);
-                      // Check Button bleibt deaktiviert, bis neue Antwort gewählt wird
-                 }, 1800); // Etwas längere Pause
-             } else {
-                 saveCompletedLesson(currentLessonId);
-                 setTimeout(closeOverlay, 1800);
-             }
-         } else {
-             // Bei falscher Antwort: Overlay bleibt offen, User muss schließen
-         }
-     }
-
-    // --- Feedback & Zustand ---
-    function showFeedback(isCorrect) {
-        feedbackDiv.textContent = isCorrect ? 'Sehr gut!' : 'Das ist nicht ganz richtig.';
-        feedbackDiv.className = 'feedback';
-        feedbackDiv.classList.add(isCorrect ? 'feedback-correct' : 'feedback-incorrect');
-        feedbackDiv.classList.add('visible');
-        playSound(isCorrect ? correctSound : incorrectSound);
-    }
-
-    function updateProgressBar() {
-        const percentage = currentLessonTotalSteps > 0 ? (currentProgress / currentLessonTotalSteps) * 100 : 0;
-        progressBarInner.style.width = `${Math.max(5, percentage)}%`; // Minimum 5% sichtbar
-    }
-
-    function resetDragDropArea() {
-        feedbackDiv.classList.remove('visible');
-        const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
-        const pTagSource = imageSource.querySelector('p');
-
-        placeholders.forEach(p => {
-            const img = p.querySelector('.dance-step-img');
-            if (img) {
-                if(pTagSource) imageSource.insertBefore(img, pTagSource.nextSibling);
-                else imageSource.appendChild(img);
-            }
-            p.innerHTML = p.dataset.order;
-        });
-
-        checkButton.disabled = true; // Bleibt deaktiviert bis neu angeordnet
-
-        if (selectedImageForPlacement) {
+        } else if (selectedImageForPlacement && imageInside) {
+            // If user tries to place on a filled placeholder, swap
+            playSound(clickSound);
+            const pTag = imageSource.querySelector('p');
+            if (pTag) imageSource.insertBefore(imageInside, pTag.nextSibling);
+            else imageSource.appendChild(imageInside);
+            clickedPlaceholder.innerHTML = '';
+            clickedPlaceholder.appendChild(selectedImageForPlacement);
             selectedImageForPlacement.classList.remove('selected-for-placement');
             selectedImageForPlacement = null;
+            removeTargetableClassFromPlaceholders();
+            checkButton.disabled = !areAllPlaceholdersFilled();
         }
-        removeTargetableClassFromPlaceholders();
-    }
-
-     function addTargetableClassToEmptyPlaceholders() {
-        dropTargetContainer.querySelectorAll('.drop-placeholder').forEach(p => {
-            p.classList.toggle('targetable', !p.querySelector('.dance-step-img'));
-        });
-    }
-
-     function removeTargetableClassFromPlaceholders() {
-        dropTargetContainer.querySelectorAll('.drop-placeholder.targetable').forEach(p => {
-            p.classList.remove('targetable');
-        });
-    }
-
-    function areAllPlaceholdersFilled() {
-        const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
-        if (placeholders.length === 0) return false;
-        return Array.from(placeholders).every(p => p.querySelector('.dance-step-img'));
-    }
-
-    function resetLessonState() {
-        resetInteractionAreas(); // Räumt Listener und Inhalte auf
-        currentLessonId = null; currentLessonType = null; currentQuizQuestionIndex = 0;
-        selectedQuizOption = null; draggedItem = null; selectedImageForPlacement = null;
-        currentProgress = 0; currentLessonTotalSteps = 0;
-        feedbackDiv.className = 'feedback'; feedbackDiv.classList.remove('visible');
-        progressBarInner.style.width = '0%';
-        checkButton.disabled = true;
-        // lessonActive wird in closeOverlay nach Timeout zurückgesetzt
-    }
-
-    function resetInteractionAreas() {
-         removeDragAndDropListeners(); // Entfernt D&D *und* Klick-Listener
-         imageSource.innerHTML = '<p>Verfügbare Schritte:</p>';
-         dropTargetContainer.innerHTML = '<p>Deine Reihenfolge:</p>';
-         quizQuestionText.textContent = '';
-         quizOptionsContainer.innerHTML = '';
-         dragArea.classList.add('hidden');
-         quizArea.classList.add('hidden');
     }
 
     // --- Drag & Drop Listener Management ---
@@ -559,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDraggables.forEach(draggable => {
             draggable.addEventListener('dragstart', dragStart);
             draggable.addEventListener('dragend', dragEnd);
-            // Klick-Listener werden schon in createDraggableImage hinzugefügt
+            draggable.addEventListener('click', handleSourceImageClick); // Ensure click always present
         });
 
         currentDropzones = Array.from(dropTargetContainer.querySelectorAll('.drop-placeholder'));
@@ -568,38 +419,39 @@ document.addEventListener('DOMContentLoaded', () => {
             zone.addEventListener('dragover', dragOver);
             zone.addEventListener('dragleave', dragLeave);
             zone.addEventListener('drop', drop);
-             // Klick-Listener werden schon in createDropPlaceholder hinzugefügt
+            if (zone.classList.contains('drop-placeholder')) {
+                zone.addEventListener('click', handlePlaceholderClick); // Ensure click always present
+            }
         });
     }
 
-     // Angepasste remove Funktion
     function removeDragAndDropListeners() {
         // Listener von Bildern entfernen
         const sourceImages = imageSource.querySelectorAll('.dance-step-img');
         sourceImages.forEach(img => {
             img.removeEventListener('dragstart', dragStart);
             img.removeEventListener('dragend', dragEnd);
-             img.removeEventListener('click', handleSourceImageClick); // Klick auch weg
+            img.removeEventListener('click', handleSourceImageClick); // Klick auch weg
         });
 
-         // Listener von Placeholder entfernen
+        // Listener von Placeholder entfernen
         const placeholders = dropTargetContainer.querySelectorAll('.drop-placeholder');
         placeholders.forEach(p => {
             p.removeEventListener('dragover', dragOver);
             p.removeEventListener('dragleave', dragLeave);
             p.removeEventListener('drop', drop);
-             p.removeEventListener('click', handlePlaceholderClick); // Klick auch weg
+            p.removeEventListener('click', handlePlaceholderClick); // Klick auch weg
         });
 
-         // Listener von Source Zone (nur Drag-bezogen)
+        // Listener von Source Zone (nur Drag-bezogen)
         sourceZone.removeEventListener('dragover', dragOver);
         sourceZone.removeEventListener('dragleave', dragLeave);
         sourceZone.removeEventListener('drop', drop);
 
-         // Referenzen im Skript zurücksetzen (optional, aber sauber)
-         currentDraggables = [];
-         currentDropzones = [];
-     }
+        // Referenzen im Skript zurücksetzen (optional, aber sauber)
+        currentDraggables = [];
+        currentDropzones = [];
+    }
 
      // Implementiere die D&D Handler hier... (bleiben inhaltlich wie vorherige Version)
      function dragStart(event) {
